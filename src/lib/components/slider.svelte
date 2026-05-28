@@ -1,8 +1,10 @@
 <script lang="ts">
   import useEmblaCarousel from 'embla-carousel-svelte'
-  import type { EmblaOptionsType } from 'embla-carousel'
+  import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel'
   import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
+  import { onDestroy } from 'svelte'
   import type { Snippet } from 'svelte'
+  import { browser } from '$app/environment';
 
   type Props = {
     options?: EmblaOptionsType
@@ -13,20 +15,64 @@
     options,
     children
   }: Props = $props()
+
+  let emblaApi = $state<EmblaCarouselType | undefined>()
+  let viewport = $state<HTMLElement | null>(null)
+
+  function onEmblaInit(event: CustomEvent<EmblaCarouselType>) {
+    emblaApi = event.detail
+    // const node = event.currentTarget as HTMLElement
+    // viewport = node
+    browser && window.addEventListener('keydown', onKeydown)
+  }
+
+  onDestroy(() => {
+    browser && window.removeEventListener('keydown', onKeydown)
+    emblaApi?.destroy()
+  })
+
+  function scrollAxis(): 'x' | 'y' {
+    return emblaApi?.internalEngine().options.axis ?? options?.axis ?? 'x'
+  }
+
+  function onKeydown(event: KeyboardEvent) {
+    if (!emblaApi) return
+
+    const axis = scrollAxis()
+    const prevKey = axis === 'y' ? 'ArrowUp' : 'ArrowLeft'
+    const nextKey = axis === 'y' ? 'ArrowDown' : 'ArrowRight'
+
+    if (event.key === prevKey) {
+      emblaApi.scrollPrev()
+      event.preventDefault()
+      // event.stopPropagation()
+    } else if (event.key === nextKey) {
+      emblaApi.scrollNext()
+      event.preventDefault()
+      // event.stopPropagation()
+    }
+  }
 </script>
 
 <div class="slider">
-  <div class="viewport" use:useEmblaCarousel={{
-    options: {
-      ...options,
-      breakpoints: {
-        '(orientation: portrait)': {
-          axis: options?.axis === 'y' ? 'x' : options?.axis === 'x' ? 'y' : undefined
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+  <div
+    class="viewport"
+    aria-roledescription="carousel"
+    tabindex="0"
+    onemblaInit={onEmblaInit}
+    use:useEmblaCarousel={{
+      options: {
+        ...options,
+        breakpoints: {
+          '(orientation: portrait)': {
+            axis: options?.axis === 'y' ? 'x' : options?.axis === 'x' ? 'y' : undefined
+          }
         }
-      }
-    },
-    plugins: [WheelGesturesPlugin()]
-  }}>
+      },
+      plugins: [WheelGesturesPlugin()]
+    }}
+  >
     <div class="container" class:vertical={options?.axis === 'y'} class:horizontal={options?.axis === 'x'}>
       {@render children()}
     </div>
@@ -40,6 +86,12 @@
   .viewport {
     overflow: hidden;
     width: 100vw;
+    outline: none;
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
   }
 
   .container {
