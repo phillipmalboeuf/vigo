@@ -1,6 +1,7 @@
 <script lang="ts">
   import Slider from '$lib/components/slider.svelte'
   import Logo from '$lib/components/logo.svelte'
+  import Image from '$lib/components/image.svelte'
   import type { PageProps } from './$types';
   
   let { data }: PageProps = $props();
@@ -37,17 +38,17 @@
     }}>
     {#each gallery.images as image}
       <div class="slide">
-        <img src={image.src} alt={image.title} />
+        <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
       </div>
     {/each}
     {#each gallery.images as image}
       <div class="slide">
-        <img src={image.src} alt={image.title} />
+        <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
       </div>
     {/each}
     {#each gallery.images as image}
       <div class="slide">
-        <img src={image.src} alt={image.title} />
+        <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
       </div>
     {/each}
     </Slider>
@@ -74,8 +75,9 @@
     justify-content: center;
   }
 
-  img {
+  .slide :global(img) {
     width: auto;
+    max-width: 100vw;
     height: 100%;
     object-fit: cover;
   }

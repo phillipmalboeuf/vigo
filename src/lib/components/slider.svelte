@@ -122,5 +122,10 @@
     min-width: 0;
     height: 100lvh;
     background: linear-gradient(to bottom right, white, black);
+
+    @media (orientation: portrait) {
+      height: auto;
+      width: 100vw;
+    }
   }
 </style>
