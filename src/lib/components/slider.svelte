@@ -118,7 +118,7 @@
   }
 
   .container :global(.slide) {
-    flex: 0 0 100%;
+    flex: 0 0 auto;
     min-width: 0;
     height: 100lvh;
     background: linear-gradient(to bottom right, white, black);
