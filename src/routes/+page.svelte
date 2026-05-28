@@ -1,5 +1,6 @@
 <script lang="ts">
   import Slider from '$lib/components/slider.svelte'
+  import Logo from '$lib/components/logo.svelte'
 </script>
 
 <!-- <Slider options={{
@@ -108,3 +109,23 @@
     <div class="slide">Slide 6.6</div>
   </Slider>
 </Slider>
+
+<figure class="logo">
+  <Logo />
+</figure>
+
+<style lang="scss">
+  .logo {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

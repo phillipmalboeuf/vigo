@@ -1,6 +1,6 @@
 @use 'utopia-core-scss' as utopia;
 
-$body_font: "Inter", sans-serif;
+$body_font: "Dolph YY", monospace;
 $heading_font: "Robinson", serif;
 $mono_font: monospace;
 
@@ -59,8 +59,8 @@ $base: 16px;
   @include utopia.generateTypeScale((
     "minWidth": 500,
     "maxWidth": 1800,
-    "minFontSize": 18,
-    "maxFontSize": 20,
+    "minFontSize": 13,
+    "maxFontSize": 16,
     "minTypeScale": 1.2,
     "maxTypeScale": 1.25,
     "positiveSteps": 8,
