@@ -21,6 +21,8 @@
     widths = [480, 768, 1024, 1440, 1920]
   }: Props = $props()
 
+  let ready = $state(false)
+
   function withWidthParam(url: string, targetWidth: number): string {
     const separator = url.includes('?') ? '&' : '?'
     return `${url}${separator}width=${targetWidth}`
@@ -40,6 +42,8 @@
 </script>
 
 <img
+  onload={() => ready = true}
+  class:ready={ready}
   src={src}
   srcset={sourceSet || undefined}
   sizes={sourceSet ? sizes : undefined}
@@ -52,5 +56,10 @@
 
 <style lang="scss">
   img {
+    transition: opacity 666ms;
+    
+    &:not(.ready) {
+      opacity: 0;
+    }
   }
 </style>
