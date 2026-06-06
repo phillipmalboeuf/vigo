@@ -12,7 +12,7 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<main class="flex">
+<main>
 {@render children()}
 </main>
 

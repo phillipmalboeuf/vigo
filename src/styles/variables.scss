@@ -5,7 +5,7 @@ $heading_font: "Robinson", serif;
 $mono_font: monospace;
 
 // $beige-pale: #F7F7F0;
-$beige: #F5F0E9;
+$beige: hsla(43, 25%, 92%, 1);
 // $jaune: hsla(38, 100%, 65%, 1);
 // $jaune-pale: hsla(38, 100%, 82%, 1);
 $brun-fonce: #675751;
@@ -42,7 +42,7 @@ $rouge: #D10502;
 // $rose: #FFB5CF;
 // $rose-pale: #FFE7EE;
 
-$noir: #423C3A;
+$noir: hsla(0, 0%, 0%, 1);
 $blanc: #FFF;
 $muted: rgba($blanc, 0.5);
 
