@@ -3,7 +3,7 @@ import type { Action } from 'svelte/action';
 
 import { getPageDialogContext, type PageData } from '$lib/page-dialog/context';
 
-const PAGE_PATHS = new Set(['/about', '/blog']);
+const PAGE_PATHS = new Set(['/about', '/blog', '/gallery']);
 
 function shouldNavigate(e: MouseEvent) {
 	return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;

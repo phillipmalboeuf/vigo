@@ -16,6 +16,7 @@ export interface BlockGallery {
 	id: string;
 	headline?: string | null;
 	tagline?: string | null;
+	text?: string | null;
 	items?: BlockGalleryItem[] | null;
 }
 

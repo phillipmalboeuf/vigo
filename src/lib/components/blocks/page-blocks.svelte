@@ -14,6 +14,7 @@
   let { blocks }: Props = $props()
 </script>
 
+<div class="flex flex--gapped">
 {#each blocks as block (block.id)}
   {#if block.type === 'block_hero'}
     <BlockHero {block} />
@@ -29,3 +30,4 @@
     <BlockPricing {block} />
   {/if}
 {/each}
+</div>

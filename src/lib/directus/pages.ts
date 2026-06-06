@@ -92,6 +92,7 @@ export type ResolvedBlock =
 			background: string;
 			tagline: string | null;
 			headline: string | null;
+			text: string | null;
 			images: ResolvedImage[];
 	  }
 	| {
@@ -188,6 +189,7 @@ const pageFields = [
 						'id',
 						'headline',
 						'tagline',
+						'text',
 						{
 							items: [
 								'id',
@@ -430,6 +432,7 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 				background,
 				tagline: gallery.tagline ?? null,
 				headline: gallery.headline ?? null,
+				text: gallery.text ?? null,
 				images: resolveGalleryImages(gallery)
 			};
 		}

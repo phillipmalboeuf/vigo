@@ -20,7 +20,7 @@
   </a>
 </header>
 
-<article class="page">
+<article class="page page-{data.page.permalink.replace(/^\//, '-')}">
   <PageBlocks blocks={data.page.blocks} />
 </article>
 
@@ -30,7 +30,13 @@
 
 <style lang="scss">
   .page {
-    
+    &.page--gallery {
+      padding: $s7 $s7 12vw;
+
+      :global(> div) {
+        --gap: #{$s6};
+      }
+    }
   }
 
   header {
