@@ -1,23 +1,22 @@
 <script lang="ts">
   import Page from '../../routes/[...page]/+page.svelte'
-  import { setPageDialogContext, type PageData } from '$lib/page-dialog/context'
+  import { page } from '$app/state'
+  import { pushState } from '$app/navigation'
+  import { setPageDialogContext } from '$lib/page-dialog/context'
   import { fade } from 'svelte/transition'
 
   let { children } = $props()
 
-  let open = $state(false)
-  let pageData = $state<PageData | null>(null)
+  const pageData = $derived(page.state.pageDialog ?? null)
 
   setPageDialogContext({
-    open(data: PageData) {
-      pageData = data
-      open = true
+    open(href, data) {
+      pushState(href, { pageDialog: data })
     },
     close() {
-      open = false
-      pageData = null
+      history.back()
     },
-    isOpen: () => open
+    isOpen: () => !!page.state.pageDialog
   })
 
   function pageParams(permalink: string) {
@@ -27,7 +26,7 @@
 
 {@render children()}
 
-{#if open && pageData}
+{#if pageData}
   <dialog open class="page-dialog" transition:fade={{ duration: 666 }}>
     <Page data={pageData} params={pageParams(pageData.page.permalink)} form={undefined} />
   </dialog>

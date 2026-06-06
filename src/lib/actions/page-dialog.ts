@@ -21,7 +21,7 @@ export const pageLink: Action<HTMLAnchorElement> = (node) => {
 		const result = await preloadData(href);
 
 		if (result.type === 'loaded' && result.status === 200) {
-			open(result.data as PageData);
+			open(href, result.data as PageData);
 			return;
 		}
 

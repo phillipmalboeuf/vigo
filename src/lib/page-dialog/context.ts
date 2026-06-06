@@ -5,7 +5,7 @@ import type { PageData } from '../../routes/[...page]/$types';
 const PAGE_DIALOG_KEY = Symbol('page-dialog');
 
 export type PageDialogContext = {
-	open: (data: PageData) => void;
+	open: (href: string, data: PageData) => void;
 	close: () => void;
 	isOpen: () => boolean;
 };
