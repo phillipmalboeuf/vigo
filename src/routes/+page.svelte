@@ -8,23 +8,45 @@
   import { browser } from '$app/environment';
   import { onDestroy, onMount } from 'svelte';
   import { pageLink } from '$lib/actions/page-dialog';
+  import type { EmblaCarouselType } from 'embla-carousel';
+  import {
+    registerHomeSlider,
+    scrollToGalleryFromHash,
+    unregisterHomeSlider
+  } from '$lib/home-slider';
   
   let { data }: PageProps = $props();
 
-  let left = $state(false)
-  let right = $state(false)
-  let top = $state(false)
-  let bottom = $state(false)
+  let left = $state(false);
+  let right = $state(false);
+  let top = $state(false);
+  let bottom = $state(false);
+
+  let outerEmblaApi = $state<EmblaCarouselType | undefined>();
+
+  $effect(() => {
+    if (!outerEmblaApi) return;
+
+    registerHomeSlider(
+      outerEmblaApi,
+      data.galleries.map((gallery) => gallery.id)
+    );
+
+    return () => unregisterHomeSlider();
+  });
 
   onMount(() => {
-    browser && window.addEventListener('keydown', onKeydown)
-    browser && window.addEventListener('keyup', onKeyup)
-  })
+    browser && window.addEventListener('keydown', onKeydown);
+    browser && window.addEventListener('keyup', onKeyup);
+    browser && window.addEventListener('hashchange', scrollToGalleryFromHash);
+    scrollToGalleryFromHash();
+  });
 
   onDestroy(() => {
-    browser && window.removeEventListener('keydown', onKeydown)
-    browser && window.removeEventListener('keyup', onKeyup)
-  })
+    browser && window.removeEventListener('keydown', onKeydown);
+    browser && window.removeEventListener('keyup', onKeyup);
+    browser && window.removeEventListener('hashchange', scrollToGalleryFromHash);
+  });
 
   function onKeydown(event: KeyboardEvent) {
     if (event.key === 'ArrowLeft') { left = true }
@@ -66,14 +88,16 @@
   </a>
 </header>
 
-<Slider options={{
+<Slider
+  bind:emblaApi={outerEmblaApi}
+  options={{
   loop: true,
   axis: 'y',
   align: 'start',
   dragFree: false,
   skipSnaps: true
 }}>
-{#each data.galleries as gallery}
+{#each data.galleries as gallery (gallery.id)}
     <Slider options={{
       loop: true,
       axis: 'x',

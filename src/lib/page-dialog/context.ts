@@ -6,7 +6,7 @@ const PAGE_DIALOG_KEY = Symbol('page-dialog');
 
 export type PageDialogContext = {
 	open: (href: string, data: PageData) => void;
-	close: () => void;
+	close: (galleryId?: string) => void;
 	isOpen: () => boolean;
 };
 

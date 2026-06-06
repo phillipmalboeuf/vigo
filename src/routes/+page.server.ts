@@ -114,7 +114,5 @@ export const load: PageServerLoad = async () => {
 		.map(toHomeGallery)
 		.filter((gallery): gallery is HomeGallery => gallery !== null);
 
-    console.log(galleries);
-
 	return { galleries };
 };

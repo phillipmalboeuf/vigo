@@ -9,20 +9,17 @@
   type Props = {
     options?: EmblaOptionsType
     children: Snippet
+    emblaApi?: EmblaCarouselType | undefined
   }
 
   let {
     options,
-    children
+    children,
+    emblaApi = $bindable()
   }: Props = $props()
-
-  let emblaApi = $state<EmblaCarouselType | undefined>()
-  let viewport = $state<HTMLElement | null>(null)
 
   function onEmblaInit(event: CustomEvent<EmblaCarouselType>) {
     emblaApi = event.detail
-    // const node = event.currentTarget as HTMLElement
-    // viewport = node
     browser && window.addEventListener('keydown', onKeydown)
   }
 

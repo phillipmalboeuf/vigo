@@ -1,9 +1,11 @@
 <script lang="ts">
   import Page from '../../routes/[...page]/+page.svelte'
   import { page } from '$app/state'
-  import { pushState } from '$app/navigation'
+  import { pushState, replaceState } from '$app/navigation'
   import { setPageDialogContext } from '$lib/page-dialog/context'
+  import { queueGalleryScroll } from '$lib/home-slider'
   import { fade } from 'svelte/transition'
+  import { tick } from 'svelte'
 
   let { children } = $props()
 
@@ -13,8 +15,12 @@
     open(href, data) {
       pushState(href, { pageDialog: data })
     },
-    close() {
-      history.back()
+    close(galleryId) {
+      replaceState(galleryId ? `/#${galleryId}` : '/', {});
+
+      if (galleryId) {
+        tick().then(() => queueGalleryScroll(galleryId));
+      }
     },
     isOpen: () => !!page.state.pageDialog
   })

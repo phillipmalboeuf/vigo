@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { homeLink } from '$lib/actions/page-dialog';
   import Image from '$lib/components/image.svelte'
   import type { ResolvedBlock } from '$lib/directus/pages'
 
@@ -15,12 +16,14 @@
     <ul class="col col--6of12 col--mobile--12of12 grid flex flex--gapped">
       {#each block.images as image (image.id)}
         <li class="col col--12of12">
-          <Image
-            src={image.src}
-            alt={image.alt}
-            width={image.width}
-            height={image.height}
-          />
+          <a href="/#{block.galleryId}" use:homeLink>
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+            />
+          </a>
         </li>
       {/each}
     </ul>
@@ -32,7 +35,7 @@
         <p class="tagline">{block.tagline}</p>
       {/if}
       {#if block.headline}
-        <h2 class="h5"><span>◁◁</span><br>{block.headline}</h2>
+        <h2 class="h5"><span>◁◁</span><br><a href="/#{block.galleryId}" use:homeLink>{block.headline}</a></h2>
       {/if}
       {#if block.text}
         <div class="richtext flex flex--gapped flex--column">{@html block.text}</div>

@@ -89,6 +89,7 @@ export type ResolvedBlock =
 	| {
 			type: 'block_gallery';
 			id: string;
+			galleryId: string;
 			background: string;
 			tagline: string | null;
 			headline: string | null;
@@ -429,6 +430,7 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 			return {
 				type: 'block_gallery',
 				id: block.id,
+				galleryId: gallery.id,
 				background,
 				tagline: gallery.tagline ?? null,
 				headline: gallery.headline ?? null,

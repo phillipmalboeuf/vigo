@@ -45,6 +45,11 @@
     left: 0;
     width: 100%;
     z-index: 10;
+    pointer-events: none;
+
+    a {
+      pointer-events: auto;
+    }
   }
 
   footer :global(svg) {

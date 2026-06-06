@@ -9,6 +9,12 @@ function shouldNavigate(e: MouseEvent) {
 	return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
 }
 
+function homeHash(href: string | null) {
+	if (!href) return null;
+	const match = href.match(/^\/#(.+)$/);
+	return match?.[1] ?? null;
+}
+
 export const pageLink: Action<HTMLAnchorElement> = (node) => {
 	const { open } = getPageDialogContext();
 
@@ -46,11 +52,15 @@ export const homeLink: Action<HTMLAnchorElement> = (node) => {
 	const { close, isOpen } = getPageDialogContext();
 
 	function onClick(event: MouseEvent) {
-		if (node.getAttribute('href') !== '/' || node.getAttribute('title') !== 'Home') return;
+		const href = node.getAttribute('href');
+		const galleryId = homeHash(href);
+		const isPlainHome = href === '/' && node.getAttribute('title') === 'Home';
+
+		if (!isPlainHome && !galleryId) return;
 		if (!isOpen() || shouldNavigate(event)) return;
 
 		event.preventDefault();
-		close();
+		close(galleryId ?? undefined);
 	}
 
 	node.addEventListener('click', onClick);
