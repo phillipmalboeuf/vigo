@@ -1,6 +1,7 @@
 <script lang="ts">
   import PageBlocks from '$lib/components/blocks/page-blocks.svelte'
   import Logo from '$lib/components/logo.svelte'
+  import { homeLink } from '$lib/actions/page-dialog'
   import type { PageProps } from './$types'
 
   let { data }: PageProps = $props()
@@ -11,7 +12,7 @@
 </svelte:head>
 
 <header class="padded flex flex--gapped flex--end">
-  <a href="/" title="Home">
+  <a href="/" title="Home" use:homeLink>
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M1.41406 1.41406L24.4141 24.4141" stroke="currentColor" stroke-width="4"/>
     <path d="M24.4141 1.41406L1.41406 24.4141" stroke="currentColor" stroke-width="4"/>
@@ -37,7 +38,6 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
     z-index: 10;
   }
 

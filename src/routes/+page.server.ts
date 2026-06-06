@@ -55,10 +55,10 @@ function toHomeGallery(block: PageBlock): HomeGallery | null {
 }
 
 export const load: PageServerLoad = async () => {
-	const [home] = await directus.request(
+	const [gallery] = await directus.request(
 		readItems('pages', {
 			filter: {
-				permalink: { _eq: '/' },
+				permalink: { _eq: '/gallery' },
 				status: { _eq: 'published' }
 			},
 			limit: 1,
@@ -110,7 +110,7 @@ export const load: PageServerLoad = async () => {
 		})
 	);
 
-	const galleries = (home?.blocks ?? [])
+	const galleries = (gallery?.blocks ?? [])
 		.map(toHomeGallery)
 		.filter((gallery): gallery is HomeGallery => gallery !== null);
 

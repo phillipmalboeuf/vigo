@@ -6,15 +6,18 @@
 	import { page } from '$app/state';
 	import { locales, localizeHref } from '$lib/paraglide/runtime';
 	import favicon from '$lib/assets/favicon.svg';
+	import PageDialog from '$lib/components/page-dialog.svelte';
 
 	let { children } = $props();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<main>
-{@render children()}
-</main>
+<PageDialog>
+	<main>
+		{@render children()}
+	</main>
+</PageDialog>
 
 <!-- <div style="display:none">
 	{#each locales as locale (locale)}
