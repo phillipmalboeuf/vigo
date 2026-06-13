@@ -65,7 +65,7 @@
 
 <!-- <Loading /> -->
 
-<header class="padded flex flex--gapped flex--middle flex--end">
+<header class="padded--tight flex flex--gapped flex--middle flex--end">
   <a href="/about" title="About" use:pageLink>
     <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M16.5 0C7.40174 0 0 7.40174 0 16.5C0 25.5983 7.40174 33 16.5 33C25.5983 33 33 25.5983 33 16.5C33 7.40174 25.5983 0 16.5 0ZM16.5 30.7241C8.65672 30.7241 2.27586 24.3433 2.27586 16.5C2.27586 8.65672 8.65672 2.27586 16.5 2.27586C24.3433 2.27586 30.7241 8.65672 30.7241 16.5C30.7241 24.3433 24.3433 30.7241 16.5 30.7241Z" fill="white"/>

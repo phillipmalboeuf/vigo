@@ -36,10 +36,10 @@
   <title>{page.title}</title>
 </svelte:head>
 
-<header class="padded flex flex--gapped flex--middle flex--end">
+<header class="padded--tight flex flex--gapped flex--middle flex--end">
   <div class="locale-switcher">
-    <button class:active={activeLocale === 'fr'} onclick={() => swithLocale('fr')}>FR</button>
     <button class:active={activeLocale === 'en'} onclick={() => swithLocale('en')}>EN</button>
+    <button class:active={activeLocale === 'fr'} onclick={() => swithLocale('fr')}>FR</button>
   </div>
   <a href="/" title="Home" use:homeLink>
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -92,12 +92,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: $s4;
-      height: $s4;
+      width: calc($s4 - 3px);
+      height: calc($s4 - 3px);
       padding: 0;
       border-radius: 50%;
-      line-height: 0;
+      line-height: 1;
       background: transparent;
+      font-size: 0.9em;
 
       &.active {
         background: $blanc;
