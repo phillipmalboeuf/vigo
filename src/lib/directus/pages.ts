@@ -16,6 +16,7 @@ import type {
 	PageBlock,
 	Post
 } from '$lib/directus/schema';
+import { getLocale } from '$lib/paraglide/runtime';
 import { readItems } from '@directus/sdk';
 
 export type ResolvedImage = {
@@ -137,7 +138,86 @@ export type ResolvedPage = {
 	blocks: ResolvedBlock[];
 };
 
-const pageFields = [
+/** Maps Paraglide locale tags to Directus `languages.code` values. */
+const DIRECTUS_LANGUAGE_CODES: Record<string, string> = {
+	fr: 'fr-FR'
+};
+
+function directusLanguageCode(locale: string): string | null {
+	return DIRECTUS_LANGUAGE_CODES[locale] ?? null;
+}
+
+function applyTranslation<T, K extends keyof T>(
+	item: T,
+	translation: Partial<Pick<T, K>> | undefined,
+	keys: K[]
+): T {
+	if (!translation) return item;
+
+	const result = { ...item };
+
+	for (const key of keys) {
+		const value = translation[key];
+		if (value != null) {
+			result[key] = value;
+		}
+	}
+
+	return result;
+}
+
+function pageFields(includeTranslations: boolean) {
+	const translatableFields = includeTranslations
+		? {
+				block_richtext: [
+					'id',
+					'headline',
+					'tagline',
+					'content',
+					'alignment',
+					{ Image: ['id', 'title', 'width', 'height'] },
+					{ translations: ['languages_code', 'headline', 'tagline', 'content'] }
+				],
+				block_gallery: [
+					'id',
+					'headline',
+					'tagline',
+					'text',
+					{
+						items: [
+							'id',
+							'sort',
+							{ directus_file: ['id', 'title', 'width', 'height'] }
+						]
+					},
+					{ translations: ['languages_code', 'headline', 'tagline', 'text'] }
+				]
+			}
+		: {
+				block_richtext: [
+					'id',
+					'headline',
+					'tagline',
+					'content',
+					'alignment',
+					{ Image: ['id', 'title', 'width', 'height'] }
+				],
+				block_gallery: [
+					'id',
+					'headline',
+					'tagline',
+					'text',
+					{
+						items: [
+							'id',
+							'sort',
+							{ directus_file: ['id', 'title', 'width', 'height'] }
+						]
+					}
+				]
+			};
+
+	return [
 	'id',
 	'title',
 	'permalink',
@@ -178,27 +258,8 @@ const pageFields = [
 							]
 						}
 					],
-					block_richtext: [
-						'id',
-						'headline',
-						'tagline',
-						'content',
-						'alignment',
-						{ Image: ['id', 'title', 'width', 'height'] }
-					],
-					block_gallery: [
-						'id',
-						'headline',
-						'tagline',
-						'text',
-						{
-							items: [
-								'id',
-								'sort',
-								{ directus_file: ['id', 'title', 'width', 'height'] }
-							]
-						}
-					],
+					block_richtext: translatableFields.block_richtext,
+					block_gallery: translatableFields.block_gallery,
 					block_form: [
 						'id',
 						'headline',
@@ -263,7 +324,8 @@ const pageFields = [
 			}
 		]
 	}
-];
+	];
+}
 
 function isDirectusFile(value: DirectusFile | string | null | undefined): value is DirectusFile {
 	return typeof value === 'object' && value !== null && 'id' in value;
@@ -410,7 +472,11 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 		}
 
 		case 'block_richtext': {
-			const richtext = item as BlockRichtext;
+			const richtext = applyTranslation(
+				item as BlockRichtext,
+				(item as BlockRichtext).translations?.[0],
+				['headline', 'tagline', 'content']
+			);
 
 			return {
 				type: 'block_richtext',
@@ -425,7 +491,11 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 		}
 
 		case 'block_gallery': {
-			const gallery = item as BlockGallery;
+			const gallery = applyTranslation(
+				item as BlockGallery,
+				(item as BlockGallery).translations?.[0],
+				['headline', 'tagline', 'text']
+			);
 
 			return {
 				type: 'block_gallery',
@@ -500,6 +570,9 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 }
 
 export async function loadPage(permalink: string): Promise<ResolvedPage | null> {
+	const languageCode = directusLanguageCode(getLocale());
+	console.log(languageCode)
+
 	const [page] = (await directus.request(
 		readItems('pages', {
 			filter: {
@@ -507,11 +580,25 @@ export async function loadPage(permalink: string): Promise<ResolvedPage | null> 
 				status: { _eq: 'published' }
 			},
 			limit: 1,
-			fields: pageFields as never,
+			fields: pageFields(Boolean(languageCode)) as never,
 			deep: {
 				blocks: {
 					_filter: { hide_block: { _eq: false } },
-					_sort: ['sort']
+					_sort: ['sort'],
+					...(languageCode && {
+						item: {
+							block_richtext: {
+								translations: {
+									_filter: { languages_code: { _eq: languageCode } }
+								}
+							},
+							block_gallery: {
+								translations: {
+									_filter: { languages_code: { _eq: languageCode } }
+								}
+							}
+						}
+					})
 				}
 			}
 		})

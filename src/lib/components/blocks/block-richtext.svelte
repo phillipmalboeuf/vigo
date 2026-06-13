@@ -108,8 +108,30 @@
     }
   }
 
+  .media {
+    position: sticky;
+    top: $s0;
+
+    @media (min-width: $tablet_portrait) {
+      top: $s2;
+    }
+
+    @media (max-width: $tablet_portrait) {
+      top: $s-2;
+    }
+  }
+
   .media :global(img) {
     width: 100%;
-    height: auto;
+    height: calc(100lvh - ($s0 * 2));
+    object-fit: cover;
+
+    @media (min-width: $tablet_portrait) {
+      height: calc(100lvh - ($s2 * 2));
+    }
+
+    @media (max-width: $tablet_portrait) {
+      height: calc(100lvh - ($s-2 * 2));
+    }
   }
 </style>

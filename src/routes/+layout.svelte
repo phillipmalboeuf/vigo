@@ -8,12 +8,12 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import PageDialog from '$lib/components/page-dialog.svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<PageDialog>
+<PageDialog dialogPages={data.dialogPages}>
 	<main>
 		{@render children()}
 	</main>

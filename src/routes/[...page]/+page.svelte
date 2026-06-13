@@ -2,16 +2,45 @@
   import PageBlocks from '$lib/components/blocks/page-blocks.svelte'
   import Logo from '$lib/components/logo.svelte'
   import { homeLink } from '$lib/actions/page-dialog'
+  import { invalidateAll } from '$app/navigation'
+  import { getLocale, setLocale, type Locale } from '$lib/paraglide/runtime'
+  import { getPageDialogContext } from '$lib/page-dialog/context'
+  import type { ResolvedPage } from '$lib/directus/pages'
+
   import type { PageProps } from './$types'
 
   let { data }: PageProps = $props()
+  let activeLocale = $state(getLocale())
+  let pageOverride = $state<ResolvedPage | null>(null)
+  let page = $derived(pageOverride ?? data.page)
+
+  const { refreshOpenPage, getPageData } = getPageDialogContext()
+
+  $effect(() => {
+    data.page.permalink
+    pageOverride = null
+  })
+
+  async function swithLocale(locale: Locale) {
+    await setLocale(locale, { reload: false })
+    activeLocale = locale
+    await invalidateAll()
+    refreshOpenPage()
+
+    const fresh = getPageData(data.page.permalink)
+    if (fresh) pageOverride = fresh.page
+  }
 </script>
 
 <svelte:head>
-  <title>{data.page.title}</title>
+  <title>{page.title}</title>
 </svelte:head>
 
-<header class="padded flex flex--gapped flex--end">
+<header class="padded flex flex--gapped flex--middle flex--end">
+  <div class="locale-switcher">
+    <button class:active={activeLocale === 'fr'} onclick={() => swithLocale('fr')}>FR</button>
+    <button class:active={activeLocale === 'en'} onclick={() => swithLocale('en')}>EN</button>
+  </div>
   <a href="/" title="Home" use:homeLink>
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M1.41406 1.41406L24.4141 24.4141" stroke="currentColor" stroke-width="4"/>
@@ -20,8 +49,8 @@
   </a>
 </header>
 
-<article class="page page-{data.page.permalink.replace(/^\//, '-')}">
-  <PageBlocks blocks={data.page.blocks} />
+<article class="page page-{page.permalink.replace(/^\//, '-')}">
+  <PageBlocks blocks={page.blocks} />
 </article>
 
 <footer>
@@ -47,8 +76,33 @@
     z-index: 10;
     pointer-events: none;
 
-    a {
+    a, button {
       pointer-events: auto;
+    }
+  }
+
+  .locale-switcher {
+    display: flex;
+    padding: 0.3em;
+    background: $noir;
+    color: $blanc;
+    border-radius: 3em;
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: $s4;
+      height: $s4;
+      padding: 0;
+      border-radius: 50%;
+      line-height: 0;
+      background: transparent;
+
+      &.active {
+        background: $blanc;
+        color: $noir;
+      }
     }
   }
 

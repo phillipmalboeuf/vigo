@@ -1,9 +1,8 @@
-import { goto, preloadData } from '$app/navigation';
+import { goto } from '$app/navigation';
 import type { Action } from 'svelte/action';
 
 import { getPageDialogContext, type PageData } from '$lib/page-dialog/context';
-
-const PAGE_PATHS = new Set(['/about', '/blog', '/gallery']);
+import { PAGE_PATH_SET } from '$lib/page-dialog/paths';
 
 function shouldNavigate(e: MouseEvent) {
 	return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
@@ -15,28 +14,30 @@ function homeHash(href: string | null) {
 	return match?.[1] ?? null;
 }
 
-export const pageLink: Action<HTMLAnchorElement> = (node) => {
-	const { open } = getPageDialogContext();
+export function openLink(
+	open: (href: string, data: PageData) => void,
+	getPageData: (href: string) => PageData | undefined,
+	href: string
+) {
+	const data = getPageData(href);
 
-	async function onClick(event: MouseEvent) {
+	if (data) {
+		open(href, data);
+		return;
+	}
+
+	goto(href);
+}
+
+export const pageLink: Action<HTMLAnchorElement> = (node) => {
+	const { open, getPageData } = getPageDialogContext();
+
+	function onClick(event: MouseEvent) {
 		const href = node.getAttribute('href');
-		if (!href || !PAGE_PATHS.has(href) || shouldNavigate(event)) return;
+		if (!href || !PAGE_PATH_SET.has(href) || shouldNavigate(event)) return;
 
 		event.preventDefault();
-
-		const result = await preloadData(href);
-
-		if (result.type === 'loaded' && result.status === 200) {
-			open(href, result.data as PageData);
-			return;
-		}
-
-		if (result.type === 'redirect') {
-			goto(result.location);
-			return;
-		}
-
-		goto(href);
+		openLink(open, getPageData, href);
 	}
 
 	node.addEventListener('click', onClick);

@@ -5,9 +5,7 @@ declare global {
 		// interface Error {}
 		// interface Locals {}
 		// interface PageData {}
-		interface PageState {
-			pageDialog?: import('./routes/[...page]/$types').PageData;
-		}
+		// interface PageState {}
 		// interface Platform {}
 	}
 }

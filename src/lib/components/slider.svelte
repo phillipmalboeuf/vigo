@@ -67,7 +67,9 @@
           }
         }
       },
-      plugins: [WheelGesturesPlugin()]
+      plugins: [WheelGesturesPlugin({
+        forceWheelAxis: options?.axis === 'y' ? 'y' : options?.axis === 'x' ? 'x' : undefined
+      })]
     }}
   >
     <div class="container" class:vertical={options?.axis === 'y'} class:horizontal={options?.axis === 'x'}>
