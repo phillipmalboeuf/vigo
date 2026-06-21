@@ -2,9 +2,10 @@
   import useEmblaCarousel from 'embla-carousel-svelte'
   import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel'
   import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
+  import RoundTransformsPlugin from '$lib/embla/round-transforms'
   import { onDestroy } from 'svelte'
   import type { Snippet } from 'svelte'
-  import { browser } from '$app/environment';
+  import { browser } from '$app/environment'
 
   type Props = {
     options?: EmblaOptionsType
@@ -67,9 +68,12 @@
           }
         }
       },
-      plugins: [WheelGesturesPlugin({
-        forceWheelAxis: options?.axis === 'y' ? 'y' : options?.axis === 'x' ? 'x' : undefined
-      })]
+      plugins: [
+        RoundTransformsPlugin(),
+        WheelGesturesPlugin({
+          forceWheelAxis: options?.axis === 'y' ? 'y' : options?.axis === 'x' ? 'x' : undefined
+        })
+      ]
     }}
   >
     <div class="container" class:vertical={options?.axis === 'y'} class:horizontal={options?.axis === 'x'}>
@@ -121,6 +125,7 @@
     min-width: 0;
     height: 100lvh;
     background: $noir;
+    margin: 0 -1px;
     // background: linear-gradient(to bottom right, white, black);
 
     @media (orientation: portrait) {

@@ -51,38 +51,38 @@ $accent: $vert;
 $accent-light: $brun;
 $accent-dark: $bleu;
 
-$base: 16px;
+$base: 15px;
   
 /* @link https://utopia.fyi/type/calculator?c=500,18,1.2,1500,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
-:root {
-  @include utopia.generateTypeScale((
-    "minWidth": 500,
-    "maxWidth": 1800,
-    "minFontSize": 13,
-    "maxFontSize": 16,
-    "minTypeScale": 1.2,
-    "maxTypeScale": 1.25,
-    "positiveSteps": 8,
-    "negativeSteps": 3,
-    "prefix": "step-",
-    "relativeTo": "viewport-width"
-  ));
-}
+// :root {
+//   @include utopia.generateTypeScale((
+//     "minWidth": 500,
+//     "maxWidth": 1800,
+//     "minFontSize": 13,
+//     "maxFontSize": 16,
+//     "minTypeScale": 1.2,
+//     "maxTypeScale": 1.25,
+//     "positiveSteps": 8,
+//     "negativeSteps": 3,
+//     "prefix": "step-",
+//     "relativeTo": "viewport-width"
+//   ));
+// }
 
-$s-3: var(--step--3);
-$s-2: var(--step--2);
-$s-1: var(--step--1);
-$s0: var(--step-0);
-$s1: var(--step-1);
-$s2: var(--step-2);
-$s3: var(--step-3);
-$s4: var(--step-4);
-$s5: var(--step-5);
-$s6: var(--step-6);
-$s7: var(--step-7);
-$s8: var(--step-8);
-$radius: $s-3;
+// $s-3: var(--step--3);
+$s-2: $base / 2;
+$s-1: $base / 1.5;
+$s0: $base;
+$s1: $base * 1.5;
+$s2: $base * 3;
+$s3: $base * (10 / 2);
+$s4: $base * (10 / 1.5);
+// $s5: $base * (10 / 1.5);
+// $s6: var(--step-6);
+// $s7: $base * (100 / 15);
+// $s8: var(--step-8);
+$radius: 3px;
 $max: 1440px;
 
 $tablet_landscape: 1380px;

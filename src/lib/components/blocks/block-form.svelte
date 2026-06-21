@@ -122,8 +122,6 @@
   .tagline {
     font-size: $s-1;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: $s-2;
   }
 
   .form {
@@ -133,12 +131,10 @@
 
   label {
     display: block;
-    margin-bottom: $s-3;
   }
 
   .help {
     display: block;
-    margin-top: $s-3;
     opacity: 0.7;
   }
 

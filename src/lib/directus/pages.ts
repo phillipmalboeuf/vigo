@@ -571,7 +571,6 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 
 export async function loadPage(permalink: string): Promise<ResolvedPage | null> {
 	const languageCode = directusLanguageCode(getLocale());
-	console.log(languageCode)
 
 	const [page] = (await directus.request(
 		readItems('pages', {

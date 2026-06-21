@@ -36,7 +36,7 @@
   <title>{page.title}</title>
 </svelte:head>
 
-<header class="padded--tight flex flex--gapped flex--middle flex--end">
+<header class="padded flex flex--gapped flex--middle flex--end">
   <div class="locale-switcher">
     <button class:active={activeLocale === 'en'} onclick={() => swithLocale('en')}>EN</button>
     <button class:active={activeLocale === 'fr'} onclick={() => swithLocale('fr')}>FR</button>
@@ -60,10 +60,10 @@
 <style lang="scss">
   .page {
     &.page--gallery {
-      padding: $s7 $s7 12vw;
+      padding: $s4 $s4 12vw;
 
       :global(> div) {
-        --gap: #{$s6};
+        --gap: #{$s2};
       }
     }
   }
@@ -92,8 +92,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: calc($s4 - 3px);
-      height: calc($s4 - 3px);
+      width: $base * 2;
+      height: $base * 2;
       padding: 0;
       border-radius: 50%;
       line-height: 1;

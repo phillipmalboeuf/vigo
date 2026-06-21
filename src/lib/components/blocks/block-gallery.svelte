@@ -35,7 +35,7 @@
         <p class="tagline">{block.tagline}</p>
       {/if}
       {#if block.headline}
-        <h2 class="h5"><span>◁◁</span><br><a href="/#{block.galleryId}" use:homeLink>{block.headline}</a></h2>
+        <h2 class="h6"><span>◁◁</span><br><a href="/#{block.galleryId}" use:homeLink>{block.headline}</a></h2>
       {/if}
       {#if block.text}
         <div class="richtext flex flex--gapped flex--column">{@html block.text}</div>
@@ -75,10 +75,13 @@
   }
 
   .header {
-    margin-bottom: $s1;
+    @media (max-width: $mobile) {
+      margin-bottom: $s1;
+    }
 
-    .h5 {
+    h2 {
       text-transform: uppercase;
+      margin-bottom: 0;
     }
   }
 

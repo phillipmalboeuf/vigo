@@ -10,7 +10,7 @@
 </script>
 
 <section class="block block-richtext padded {block.background} align-{block.alignment}">
-  <div class="flex flex--gapped">
+  <div class="flex">
     {#if block.image}
       <figure class="media col col--6of12 col--mobile--12of12">
         <Image
@@ -23,7 +23,7 @@
     {/if}
 
     <div
-      class="content padded--thick col col--mobile--12of12 flex flex--gapped flex--column"
+      class="content col col--mobile--12of12 flex flex--gapped flex--column"
       class:col--6of12={!!block.image}
       class:col--12of12={!block.image}
     >
@@ -74,6 +74,10 @@
         // text-align: right;
       }
     }
+
+    .content {
+      padding: $s4 ($s4 - $s2);
+    }
   }
 
   h1 {
@@ -96,8 +100,8 @@
       display: inline-block;
       background: $noir;
       color: $blanc;
-      padding: 2px $s-2;
-      border-radius: calc($radius * 2);
+      padding: 3px $s-1;
+      border-radius: 1em;
       transition: background-color 333ms, color 333ms;
 
       &:hover,
