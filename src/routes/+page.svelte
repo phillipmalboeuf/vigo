@@ -2,7 +2,9 @@
   import Slider from '$lib/components/slider.svelte'
   import Logo from '$lib/components/logo.svelte'
   import Image from '$lib/components/image.svelte'
+  import Video from '$lib/components/video.svelte'
   import Loading from '$lib/components/loading.svelte'
+  import { isVideoFile } from '$lib/directus/media'
 
   import type { PageProps } from './$types';
   import { browser } from '$app/environment';
@@ -107,17 +109,29 @@
     }}>
     {#each gallery.images as image}
       <div class="slide">
-        <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+        {#if isVideoFile(image.type)}
+          <Video src={image.src} title={image.title} width={image.width} height={image.height} />
+        {:else}
+          <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+        {/if}
       </div>
     {/each}
     {#each gallery.images as image}
       <div class="slide">
-        <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+        {#if isVideoFile(image.type)}
+          <Video src={image.src} title={image.title} width={image.width} height={image.height} />
+        {:else}
+          <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+        {/if}
       </div>
     {/each}
     {#each gallery.images as image}
       <div class="slide">
-        <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+        {#if isVideoFile(image.type)}
+          <Video src={image.src} title={image.title} width={image.width} height={image.height} />
+        {:else}
+          <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+        {/if}
       </div>
     {/each}
     </Slider>
@@ -196,7 +210,8 @@
     }
   }
 
-  .slide :global(img) {
+  .slide :global(img),
+  .slide :global(video) {
     width: auto;
     max-width: 100vw;
     height: 100%;

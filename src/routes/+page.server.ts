@@ -7,6 +7,7 @@ import type { PageServerLoad } from './$types';
 export type HomeGalleryImage = {
 	id: string;
 	title: string | null;
+	type: string | null;
 	width: number | null;
 	height: number | null;
 	src: string;
@@ -34,6 +35,7 @@ function toGalleryImages(gallery: BlockGallery): HomeGalleryImage[] {
 				{
 					id: item.directus_file.id,
 					title: item.directus_file.title ?? null,
+					type: item.directus_file.type ?? null,
 					width: item.directus_file.width ?? null,
 					height: item.directus_file.height ?? null,
 					src: assetUrl(item.directus_file.id)
@@ -86,6 +88,7 @@ export const load: PageServerLoad = async () => {
 													'id',
 													'filename_download',
 													'title',
+													'type',
 													'width',
 													'height'
 												]

@@ -2,6 +2,7 @@ export interface DirectusFile {
 	id: string;
 	filename_download?: string | null;
 	title?: string | null;
+	type?: string | null;
 	width?: number | null;
 	height?: number | null;
 }

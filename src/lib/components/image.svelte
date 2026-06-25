@@ -23,21 +23,29 @@
 
   let ready = $state(false)
 
-  function withWidthParam(url: string, targetWidth: number): string {
+  const isVertical = $derived(width !== null && height !== null && height > width)
+
+  function withTransformParam(url: string, targetSize: number, dimension: 'width' | 'height'): string {
     const separator = url.includes('?') ? '&' : '?'
-    return `${url}${separator}width=${targetWidth}`
+    return `${url}${separator}${dimension}=${targetSize}&format=webp`
   }
 
   const sourceSet = $derived.by(() => {
+    const maxSize = isVertical ? height : width
     const candidates = widths
-      .filter((candidate) => candidate > 0 && (width === null || candidate <= width))
+      .filter((candidate) => candidate > 0 && (maxSize === null || candidate <= maxSize))
       .sort((a, b) => a - b)
 
-    if (width !== null && !candidates.includes(width)) {
-      candidates.push(width)
+    if (maxSize !== null && !candidates.includes(maxSize)) {
+      candidates.push(maxSize)
     }
 
-    return candidates.map((candidate) => `${withWidthParam(src, candidate)} ${candidate}w`).join(', ')
+    const dimension = isVertical ? 'height' : 'width'
+    const descriptor = isVertical ? 'h' : 'w'
+
+    return candidates
+      .map((candidate) => `${withTransformParam(src, candidate, dimension)} ${candidate}${descriptor}`)
+      .join(', ')
   })
 </script>
 
