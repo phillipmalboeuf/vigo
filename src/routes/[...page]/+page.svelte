@@ -36,7 +36,7 @@
   <title>{page.title}</title>
 </svelte:head>
 
-<header class="padded flex flex--gapped flex--middle flex--end">
+<header class="padded flex flex--thick_gapped flex--middle flex--end">
   <div class="locale-switcher">
     <button class:active={activeLocale === 'en'} onclick={() => swithLocale('en')}>EN</button>
     <button class:active={activeLocale === 'fr'} onclick={() => swithLocale('fr')}>FR</button>

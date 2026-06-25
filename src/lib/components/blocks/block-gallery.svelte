@@ -11,9 +11,9 @@
 </script>
 
 <section class="block block-gallery col col--6of12 {block.background}">
-  <div class="flex flex--gapped">
+  <div class="flex flex--thick_gapped">
   {#if block.images.length}
-    <ul class="col col--6of12 col--mobile--12of12 grid flex flex--gapped">
+    <ul class="col col--6of12 col--mobile--12of12 grid">
       {#each block.images as image (image.id)}
         <li class="col col--12of12">
           <a href="/#{block.galleryId}" use:homeLink>
@@ -30,16 +30,18 @@
   {/if}
 
   {#if block.tagline || block.headline || block.text}
-    <header class="header col col--6of12 col--mobile--12of12 flex flex--gapped flex--column">
-      {#if block.tagline}
-        <p class="tagline">{block.tagline}</p>
-      {/if}
-      {#if block.headline}
-        <h2 class="h6"><span>◁◁</span><br><a href="/#{block.galleryId}" use:homeLink>{block.headline}</a></h2>
-      {/if}
-      {#if block.text}
-        <div class="richtext flex flex--gapped flex--column">{@html block.text}</div>
-      {/if}
+    <header class="header col col--6of12 col--mobile--12of12">
+      <div class="flex flex--gapped flex--column">
+        {#if block.tagline}
+          <p class="tagline">{block.tagline}</p>
+        {/if}
+        {#if block.headline}
+          <h2 class="h6"><span>◁◁</span><br><a href="/#{block.galleryId}" use:homeLink>{block.headline}</a></h2>
+        {/if}
+        {#if block.text}
+          <div class="richtext"><div class="flex flex--gapped flex--column">{@html block.text}</div></div>
+        {/if}
+      </div>
     </header>
   {/if}
   </div>
