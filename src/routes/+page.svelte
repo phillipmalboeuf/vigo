@@ -238,6 +238,11 @@
     left: 0;
     width: 100%;
     z-index: 9;
+
+    @media (max-width: $tablet_portrait) {
+      top: $s1;
+      padding-right: calc($s0 + $s-1);
+    }
   }
 
   .logo {
@@ -255,12 +260,23 @@
     
     color: $blanc;
 
+    @media (max-width: $tablet_portrait) {
+      :global(svg:first-child) {
+        width: 340px;
+      }
+    }
+
     svg {
       position: absolute;
       bottom: $s2;
       right: $s2;
       overflow: visible;
       pointer-events: auto;
+
+      @media (max-width: $tablet_portrait) {
+        left: 0;
+        width: 100%;
+      }
 
       g {
         cursor: pointer;

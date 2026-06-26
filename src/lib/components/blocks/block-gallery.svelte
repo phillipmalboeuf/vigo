@@ -78,7 +78,7 @@
 
   .header {
     @media (max-width: $mobile) {
-      margin-bottom: $s1;
+      display: none;
     }
 
     h2 {

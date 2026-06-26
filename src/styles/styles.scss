@@ -648,10 +648,6 @@ dialog {
 	@media (min-width: $tablet_portrait) {
 		padding: $s2;
 	}
-
-	@media (max-width: $tablet_portrait) {
-		padding: $s-2;
-	}
 }
 
 	.padded--tight {
@@ -722,6 +718,9 @@ dialog {
 		// hr {
 		// 	margin: 0;
 		// }
+		@media (max-width: $tablet_portrait) {
+      --gap: #{$s0};
+    }
   }
 
   &.flex--tight_gapped {

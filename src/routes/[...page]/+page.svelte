@@ -62,8 +62,16 @@
     &.page--gallery {
       padding: $s4 $s4 12vw;
 
+      @media (max-width: $tablet_portrait) {
+        padding: $s4 $s0 $s0;
+      }
+
       :global(> div) {
         --gap: #{$s2};
+
+        @media (max-width: $tablet_portrait) {
+          --gap: #{$s0};
+        }
       }
     }
   }
@@ -75,6 +83,11 @@
     width: 100%;
     z-index: 10;
     pointer-events: none;
+
+    @media (max-width: $tablet_portrait) {
+      top: $s1;
+      padding-right: calc($s0 + $s-1);
+    }
 
     a, button {
       pointer-events: auto;
@@ -107,6 +120,12 @@
     }
   }
 
+  header:has(+ .page--gallery) .locale-switcher {
+    @media (max-width: $mobile) {
+      display: none;
+    }
+  }
+
   footer :global(svg) {
     position: fixed;
     bottom: -2.75vw;
@@ -116,5 +135,11 @@
     z-index: 10;
 
     color: $noir;
+
+    @media (max-width: $tablet_portrait) {
+      bottom: 50vh;
+      transform: translateY(50%);
+      padding: $s0;
+    }
   }
 </style>

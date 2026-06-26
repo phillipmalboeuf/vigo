@@ -77,6 +77,10 @@
 
     .content {
       padding: $s4 ($s4 - $s2);
+
+      @media (max-width: $mobile) {
+        padding: 20vw 0;
+      }
     }
   }
 
@@ -120,8 +124,9 @@
       top: $s2;
     }
 
-    @media (max-width: $tablet_portrait) {
-      top: $s-2;
+    @media (max-width: $mobile) {
+      position: relative;
+      top: 0;
     }
   }
 
@@ -134,8 +139,10 @@
       height: calc(100lvh - ($s2 * 2));
     }
 
-    @media (max-width: $tablet_portrait) {
-      height: calc(100lvh - ($s-2 * 2));
+    @media (max-width: $mobile) {
+      height: calc(50lvh - 14vw);
+      border-top-right-radius: $s2;
+      border-top-left-radius: $s2;
     }
   }
 </style>
