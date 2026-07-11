@@ -4,7 +4,6 @@
     title?: string | null
     width?: number | null
     height?: number | null
-    autoplay?: boolean
     loop?: boolean
     muted?: boolean
     playsinline?: boolean
@@ -15,20 +14,39 @@
     title = null,
     width = null,
     height = null,
-    autoplay = false,
     loop = true,
     muted = true,
     playsinline = true
   }: Props = $props()
 
   let ready = $state(false)
+  let video = $state<HTMLVideoElement | null>(null)
+
+  $effect(() => {
+    const el = video
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.play().catch(() => {})
+        } else {
+          el.pause()
+        }
+      },
+      { threshold: 0.25 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  })
 </script>
 
 <video
+  bind:this={video}
   onloadeddata={() => ready = true}
   class:ready={ready}
   {src}
-  {autoplay}
   {loop}
   {muted}
   {playsinline}

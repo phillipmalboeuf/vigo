@@ -131,6 +131,7 @@
     @media (orientation: portrait) {
       height: auto;
       width: 100vw;
+      margin: -1px 0;
     }
   }
 </style>
