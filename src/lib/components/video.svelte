@@ -1,5 +1,6 @@
 <script lang="ts">
   const LONG_VIDEO_SECONDS = 8
+  const CONTROLS_IDLE_MS = 2500
 
   type Props = {
     src: string
@@ -30,6 +31,8 @@
   let progress = $state(0)
   let duration = $state(0)
   let scrubbing = $state(false)
+  let controlsVisible = $state(true)
+  let hideControlsTimer: ReturnType<typeof setTimeout> | null = null
 
   $effect(() => {
     if (!isLong) isMuted = muted
@@ -44,16 +47,54 @@
         inView = entry.isIntersecting
         if (entry.isIntersecting) {
           el.play().catch(() => {})
+          revealControls()
         } else {
           el.pause()
+          clearHideControlsTimer()
+          controlsVisible = false
         }
       },
       { threshold: 0.5 }
     )
 
     observer.observe(el)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      clearHideControlsTimer()
+    }
   })
+
+  $effect(() => {
+    if (!isLong || !inView) return
+
+    if (scrubbing || !playing) {
+      clearHideControlsTimer()
+      controlsVisible = true
+      return
+    }
+
+    scheduleHideControls()
+  })
+
+  function clearHideControlsTimer() {
+    if (hideControlsTimer === null) return
+    clearTimeout(hideControlsTimer)
+    hideControlsTimer = null
+  }
+
+  function scheduleHideControls() {
+    clearHideControlsTimer()
+    if (scrubbing || !playing) return
+
+    hideControlsTimer = setTimeout(() => {
+      if (!scrubbing && playing) controlsVisible = false
+    }, CONTROLS_IDLE_MS)
+  }
+
+  function revealControls() {
+    controlsVisible = true
+    scheduleHideControls()
+  }
 
   function onLoadedMetadata() {
     const el = video
@@ -83,6 +124,7 @@
     } else {
       el.pause()
     }
+    revealControls()
   }
 
   function toggleMute() {
@@ -91,6 +133,7 @@
 
     el.muted = !el.muted
     isMuted = el.muted
+    revealControls()
   }
 
   function seekFromEvent(event: PointerEvent, track: HTMLElement) {
@@ -106,6 +149,8 @@
   function onTrackPointerDown(event: PointerEvent) {
     const track = event.currentTarget as HTMLElement
     scrubbing = true
+    controlsVisible = true
+    clearHideControlsTimer()
     track.setPointerCapture(event.pointerId)
     seekFromEvent(event, track)
   }
@@ -122,12 +167,20 @@
     if (track.hasPointerCapture(event.pointerId)) {
       track.releasePointerCapture(event.pointerId)
     }
+    revealControls()
   }
 
   const shouldMute = $derived(isLong ? isMuted : muted)
 </script>
 
-<div class="video" class:long={isLong} class:ready={ready}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+  class="video"
+  class:long={isLong}
+  class:ready={ready}
+  onpointermove={isLong ? revealControls : undefined}
+  onpointerdown={isLong ? revealControls : undefined}
+>
   <video
     bind:this={video}
     onloadeddata={() => ready = true}
@@ -146,7 +199,12 @@
   ></video>
 
   {#if isLong && inView}
-    <div class="controls" role="group" aria-label="Video controls">
+    <div
+      class="controls"
+      class:visible={controlsVisible}
+      role="group"
+      aria-label="Video controls"
+    >
       <button type="button" class="control-btn" aria-label={playing ? 'Pause' : 'Play'} onclick={togglePlay}>
         {#if playing}
           <svg width="20" height="23" viewBox="67.9854 552.852 19.6745 22.781" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -232,8 +290,15 @@
     display: flex;
     align-items: center;
     gap: $s0;
-    pointer-events: auto;
     color: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 333ms ease;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     @media (max-width: $tablet_portrait) {
       left: max($s0, env(safe-area-inset-left, 0px));
