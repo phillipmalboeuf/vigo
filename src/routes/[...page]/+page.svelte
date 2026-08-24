@@ -34,9 +34,10 @@
 
 <svelte:head>
   <title>{page.title}</title>
+  <meta name="theme-color" content="#ffffff" />
 </svelte:head>
 
-<header class="padded flex flex--thick_gapped flex--middle flex--end">
+<header class="flex flex--thick_gapped flex--middle flex--end">
   <div class="locale-switcher">
     <button class:active={activeLocale === 'en'} onclick={() => swithLocale('en')}>EN</button>
     <button class:active={activeLocale === 'fr'} onclick={() => swithLocale('fr')}>FR</button>
@@ -59,19 +60,20 @@
 
 <style lang="scss">
   .page {
+    background: $blanc;
+    min-height: 100dvh;
+
     &.page--gallery {
-      padding: $s4 $s4 12vw;
+      --page-gutter: #{$s2 + $s-2};
+      padding: calc(#{$s4} + env(safe-area-inset-top, 0px)) var(--page-gutter) 12vw;
 
       @media (max-width: $tablet_portrait) {
-        padding: $s4 $s0 $s0;
+        --page-gutter: #{$s0};
+        padding: calc(#{$s4} + env(safe-area-inset-top, 0px)) var(--page-gutter) $s0;
       }
 
       :global(> div) {
-        --gap: #{$s2};
-
-        @media (max-width: $tablet_portrait) {
-          --gap: #{$s0};
-        }
+        --gap: var(--page-gutter);
       }
     }
   }
@@ -83,10 +85,21 @@
     width: 100%;
     z-index: 10;
     pointer-events: none;
+    padding: max($s0, env(safe-area-inset-top, 0px))
+      max($s0, env(safe-area-inset-right, 0px))
+      $s0
+      max($s0, env(safe-area-inset-left, 0px));
+
+    @media (min-width: $tablet_portrait) {
+      padding: max($s2, env(safe-area-inset-top, 0px))
+        max($s2, env(safe-area-inset-right, 0px))
+        $s2
+        max($s2, env(safe-area-inset-left, 0px));
+    }
 
     @media (max-width: $tablet_portrait) {
-      top: $s1;
-      padding-right: calc($s0 + $s-1);
+      padding-top: max($s1, env(safe-area-inset-top, 0px));
+      padding-right: calc($s0 + $s-1 + env(safe-area-inset-right, 0px));
     }
 
     a, button {
@@ -137,7 +150,7 @@
     color: $noir;
 
     @media (max-width: $tablet_portrait) {
-      bottom: 50vh;
+      bottom: 50dvh;
       transform: translateY(50%);
       padding: $s0;
     }

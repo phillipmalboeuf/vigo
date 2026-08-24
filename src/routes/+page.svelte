@@ -16,6 +16,12 @@
     scrollToGalleryFromHash,
     unregisterHomeSlider
   } from '$lib/home-slider';
+
+  function mediaOrientation(width: number | null, height: number | null): 'horizontal' | 'vertical' | 'square' {
+    if (width === null || height === null) return 'horizontal'
+    if (width === height) return 'square'
+    return height > width ? 'vertical' : 'horizontal'
+  }
   
   let { data }: PageProps = $props();
 
@@ -85,7 +91,7 @@
 
 <!-- <Loading /> -->
 
-<header class="padded flex flex--thick_gapped flex--middle flex--end">
+<header class="flex flex--thick_gapped flex--middle flex--end">
   <a href="/about" title="About" use:pageLink>
     <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M16.5 0C7.40174 0 0 7.40174 0 16.5C0 25.5983 7.40174 33 16.5 33C25.5983 33 33 25.5983 33 16.5C33 7.40174 25.5983 0 16.5 0ZM16.5 30.7241C8.65672 30.7241 2.27586 24.3433 2.27586 16.5C2.27586 8.65672 8.65672 2.27586 16.5 2.27586C24.3433 2.27586 30.7241 8.65672 30.7241 16.5C30.7241 24.3433 24.3433 30.7241 16.5 30.7241Z" fill="white"/>
@@ -127,29 +133,35 @@
     }}>
     {#each gallery.images as image}
       <div class="slide">
-        {#if isVideoFile(image.type)}
-          <Video src={image.src} title={image.title} width={image.width} height={image.height} />
-        {:else}
-          <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
-        {/if}
+        <div class="media-frame media-frame--{mediaOrientation(image.width, image.height)}">
+          {#if isVideoFile(image.type)}
+            <Video src={image.src} title={image.title} width={image.width} height={image.height} />
+          {:else}
+            <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+          {/if}
+        </div>
       </div>
     {/each}
     {#each gallery.images as image}
       <div class="slide">
-        {#if isVideoFile(image.type)}
-          <Video src={image.src} title={image.title} width={image.width} height={image.height} />
-        {:else}
-          <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
-        {/if}
+        <div class="media-frame media-frame--{mediaOrientation(image.width, image.height)}">
+          {#if isVideoFile(image.type)}
+            <Video src={image.src} title={image.title} width={image.width} height={image.height} />
+          {:else}
+            <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+          {/if}
+        </div>
       </div>
     {/each}
     {#each gallery.images as image}
       <div class="slide">
-        {#if isVideoFile(image.type)}
-          <Video src={image.src} title={image.title} width={image.width} height={image.height} />
-        {:else}
-          <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
-        {/if}
+        <div class="media-frame media-frame--{mediaOrientation(image.width, image.height)}">
+          {#if isVideoFile(image.type)}
+            <Video src={image.src} title={image.title} width={image.width} height={image.height} />
+          {:else}
+            <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+          {/if}
+        </div>
       </div>
     {/each}
     </Slider>
@@ -238,10 +250,21 @@
     left: 0;
     width: 100%;
     z-index: 9;
+    padding: max($s0, env(safe-area-inset-top, 0px))
+      max($s0, env(safe-area-inset-right, 0px))
+      $s0
+      max($s0, env(safe-area-inset-left, 0px));
+
+    @media (min-width: $tablet_portrait) {
+      padding: max($s2, env(safe-area-inset-top, 0px))
+        max($s2, env(safe-area-inset-right, 0px))
+        $s2
+        max($s2, env(safe-area-inset-left, 0px));
+    }
 
     @media (max-width: $tablet_portrait) {
-      top: $s1;
-      padding-right: calc($s0 + $s-1);
+      padding-top: max($s1, env(safe-area-inset-top, 0px));
+      padding-right: calc($s0 + $s-1 + env(safe-area-inset-right, 0px));
     }
   }
 
@@ -251,7 +274,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100dvh;
     pointer-events: none;
 
     display: flex;
@@ -268,13 +291,14 @@
 
     svg {
       position: absolute;
-      bottom: $s2;
-      right: $s2;
+      bottom: max($s2, env(safe-area-inset-bottom, 0px));
+      right: max($s2, env(safe-area-inset-right, 0px));
       overflow: visible;
       pointer-events: auto;
 
       @media (max-width: $tablet_portrait) {
         left: 0;
+        right: 0;
         width: 100%;
       }
 
@@ -282,7 +306,6 @@
         cursor: pointer;
         transition: transform 333ms;
         outline: none;
-        // transform-origin: 50% 50%;
 
         &.down {
           transform: translateY(0.2rem);
@@ -291,11 +314,72 @@
     }
   }
 
-  .slide :global(img),
-  .slide :global(video) {
-    width: auto;
-    max-width: 100vw;
+  .slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .media-frame {
+    position: relative;
+    overflow: hidden;
+    flex: 0 0 auto;
     height: 100%;
-    object-fit: cover;
+    max-width: 100vw;
+
+    &--horizontal {
+      aspect-ratio: 2400 / 1600;
+      width: auto;
+      height: 100%;
+      max-height: 100%;
+    }
+
+    &--vertical {
+      aspect-ratio: 1920 / 2400;
+      width: auto;
+      height: 100%;
+      max-height: 100%;
+    }
+
+    &--square {
+      aspect-ratio: 1 / 1;
+      width: auto;
+      height: 100%;
+      max-height: 100%;
+    }
+
+    @media (orientation: portrait) {
+      width: 100vw;
+      height: auto;
+      max-height: none;
+
+      &--horizontal {
+        aspect-ratio: 3 / 2;
+        height: auto;
+      }
+
+      &--vertical {
+        aspect-ratio: 2 / 3;
+        height: auto;
+        max-height: 100dvh;
+        width: auto;
+        max-width: 100vw;
+      }
+
+      &--square {
+        aspect-ratio: 1 / 1;
+        height: auto;
+      }
+    }
+
+    :global(img),
+    :global(video),
+    :global(.video) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
   }
 </style>

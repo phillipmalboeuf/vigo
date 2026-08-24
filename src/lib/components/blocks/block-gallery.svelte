@@ -11,7 +11,7 @@
 </script>
 
 <section class="block block-gallery col col--6of12 {block.background}">
-  <div class="flex flex--thick_gapped">
+  <div class="flex layout">
   {#if block.images.length}
     <ul class="col col--6of12 col--mobile--12of12 grid">
       {#each block.images as image (image.id)}
@@ -49,14 +49,7 @@
 
 <style lang="scss">
   .block-gallery {
-    // padding: $s2;
-    // padding-right: 0;
-    // padding-bottom: 0;
-
-    &:nth-child(even) {
-      // padding-right: $s2;
-      // padding-left: 0;
-    }
+    --page-gutter: #{$s2 + $s-2};
 
     &.dark {
       color: $blanc;
@@ -74,10 +67,18 @@
         }
       }
     }
+
+    > .layout {
+      --gap: var(--page-gutter);
+    }
   }
 
   .header {
     @media (max-width: $mobile) {
+      display: none;
+    }
+
+    @media (orientation: portrait) and (max-width: $tablet_portrait) {
       display: none;
     }
 
@@ -96,22 +97,21 @@
 
   .richtext {
     max-width: 65ch;
+    font-size: 13px;
+    line-height: 1.35;
 
-    // :global(a) {
-    //   text-decoration: none;
-    //   display: inline-block;
-    //   background: $noir;
-    //   color: $blanc;
-    //   padding: 2px $s-2;
-    //   border-radius: calc($radius * 2);
-    //   transition: background-color 333ms, color 333ms;
+    @media (max-width: $tablet_landscape) {
+      font-size: 12px;
+    }
 
-    //   &:hover,
-    //   &:focus {
-    //     background: $blanc;
-    //     color: $noir;
-    //   }
-    // }
+    @media (max-width: $tablet_portrait) {
+      font-size: 11px;
+    }
+
+    :global(p) {
+      font-size: inherit;
+      line-height: inherit;
+    }
   }
 
   .grid {
@@ -128,6 +128,15 @@
     height: auto;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    // border-radius: $radius;
   }
+
+  // @media (orientation: portrait) and (max-width: $tablet_portrait) {
+  //   .block-gallery {
+  //     width: 100% !important;
+
+  //     .col {
+  //       width: 100% !important;
+  //     }
+  //   }
+  // }
 </style>
