@@ -88,7 +88,10 @@
 <style lang="scss">
   .viewport {
     overflow: hidden;
-    width: 100vw;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100lvh;
+    background: $noir;
     outline: none;
 
     &:focus-visible {
@@ -103,17 +106,20 @@
 
     &.horizontal {
       @media (orientation: portrait) {
-        height: 100dvh;
+        height: 100vh;
+        height: 100lvh;
         flex-direction: column;
       }
     }
 
     &.vertical {
-      height: 100dvh;
+      height: 100vh;
+      height: 100lvh;
       flex-direction: column;
       // touch-action: pan-x pinch-zoom;
 
       @media (orientation: portrait) {
+        // min-height: 0;
         height: auto;
         flex-direction: row;
       }
@@ -123,13 +129,15 @@
   .container :global(.slide) {
     flex: 0 0 auto;
     min-width: 0;
-    height: 100dvh;
+    height: 100vh;
+    height: 100lvh;
     background: $noir;
     margin: 0 -1px;
 
     @media (orientation: portrait) {
       height: auto;
-      // min-height: 100dvh;
+      // min-height: 100vh;
+      // min-height: 100lvh;
       width: 100vw;
       margin: -1px 0;
     }

@@ -62,9 +62,11 @@
     z-index: 100;
     background: $blanc;
     overflow: auto;
-    width: 100vw;
-    height: 100dvh;
-    max-width: 100vw;
-    max-height: 100dvh;
+    width: 100%;
+    height: 100%;
+    height: 100lvh;
+    height: -webkit-fill-available;
+    max-width: 100%;
+    max-height: none;
   }
 </style>

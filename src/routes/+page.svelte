@@ -274,7 +274,9 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100dvh;
+    height: 100%;
+    height: 100lvh;
+    height: -webkit-fill-available;
     pointer-events: none;
 
     display: flex;
@@ -350,21 +352,21 @@
     }
 
     @media (orientation: portrait) {
-      width: 100vw;
+      width: 100%;
       height: auto;
       max-height: none;
 
       &--horizontal {
-        aspect-ratio: 3 / 2;
+        aspect-ratio: 2400 / 1600;
         height: auto;
       }
 
       &--vertical {
-        aspect-ratio: 2 / 3;
+        aspect-ratio: 1920 / 2400;
         height: auto;
-        max-height: 100dvh;
+        max-height: 100lvh;
         width: auto;
-        max-width: 100vw;
+        max-width: 100%;
       }
 
       &--square {
