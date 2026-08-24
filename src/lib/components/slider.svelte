@@ -89,8 +89,7 @@
   .viewport {
     overflow: hidden;
     width: 100%;
-    min-height: 100vh;
-    min-height: 100lvh;
+    min-height: 100dvh;
     background: $noir;
     outline: none;
 
@@ -106,15 +105,13 @@
 
     &.horizontal {
       @media (orientation: portrait) {
-        height: 100vh;
-        height: 100lvh;
+        height: 100dvh;
         flex-direction: column;
       }
     }
 
     &.vertical {
-      height: 100vh;
-      height: 100lvh;
+      height: 100dvh;
       flex-direction: column;
       // touch-action: pan-x pinch-zoom;
 
@@ -129,15 +126,12 @@
   .container :global(.slide) {
     flex: 0 0 auto;
     min-width: 0;
-    height: 100vh;
-    height: 100lvh;
+    height: 100dvh;
     background: $noir;
     margin: 0 -1px;
 
     @media (orientation: portrait) {
       height: auto;
-      // min-height: 100vh;
-      // min-height: 100lvh;
       width: 100vw;
       margin: -1px 0;
     }

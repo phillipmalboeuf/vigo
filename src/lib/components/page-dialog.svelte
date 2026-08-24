@@ -63,9 +63,7 @@
     background: $blanc;
     overflow: auto;
     width: 100%;
-    height: 100%;
-    height: 100lvh;
-    height: -webkit-fill-available;
+    height: 100dvh;
     max-width: 100%;
     max-height: none;
   }

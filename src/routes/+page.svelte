@@ -274,9 +274,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    height: 100lvh;
-    height: -webkit-fill-available;
+    height: 100dvh;
     pointer-events: none;
 
     display: flex;
@@ -364,7 +362,7 @@
       &--vertical {
         aspect-ratio: 1920 / 2400;
         height: auto;
-        max-height: 100lvh;
+        max-height: 100dvh;
         width: auto;
         max-width: 100%;
       }
