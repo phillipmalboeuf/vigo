@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [
 		sveltekit(),
-		paraglideVitePlugin({ project: './project.inlang', outdir: './src/lib/paraglide', strategy: ['cookie', 'baseLocale'] })
+		paraglideVitePlugin({ project: './project.inlang', outdir: './src/lib/paraglide', strategy: ['cookie', 'preferredLanguage', 'baseLocale'] })
 	],
 	css: {
 		preprocessorOptions: {
