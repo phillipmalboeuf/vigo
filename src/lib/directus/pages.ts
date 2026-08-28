@@ -81,7 +81,6 @@ export type ResolvedBlock =
 			type: 'block_richtext';
 			id: string;
 			background: string;
-			tagline: string | null;
 			headline: string | null;
 			content: string | null;
 			alignment: string;
@@ -92,7 +91,6 @@ export type ResolvedBlock =
 			id: string;
 			galleryId: string;
 			background: string;
-			tagline: string | null;
 			headline: string | null;
 			text: string | null;
 			images: ResolvedImage[];
@@ -172,16 +170,14 @@ function pageFields(includeTranslations: boolean) {
 				block_richtext: [
 					'id',
 					'headline',
-					'tagline',
 					'content',
 					'alignment',
 					{ Image: ['id', 'title', 'width', 'height'] },
-					{ translations: ['languages_code', 'headline', 'tagline', 'content'] }
+					{ translations: ['languages_code', 'headline', 'content'] }
 				],
 				block_gallery: [
 					'id',
 					'headline',
-					'tagline',
 					'text',
 					{
 						items: [
@@ -190,14 +186,13 @@ function pageFields(includeTranslations: boolean) {
 							{ directus_file: ['id', 'title', 'width', 'height'] }
 						]
 					},
-					{ translations: ['languages_code', 'headline', 'tagline', 'text'] }
+					{ translations: ['languages_code', 'headline', 'text'] }
 				]
 			}
 		: {
 				block_richtext: [
 					'id',
 					'headline',
-					'tagline',
 					'content',
 					'alignment',
 					{ Image: ['id', 'title', 'width', 'height'] }
@@ -205,7 +200,6 @@ function pageFields(includeTranslations: boolean) {
 				block_gallery: [
 					'id',
 					'headline',
-					'tagline',
 					'text',
 					{
 						items: [
@@ -475,14 +469,13 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 			const richtext = applyTranslation(
 				item as BlockRichtext,
 				(item as BlockRichtext).translations?.[0],
-				['headline', 'tagline', 'content']
+				['headline', 'content']
 			);
 
 			return {
 				type: 'block_richtext',
 				id: block.id,
 				background,
-				tagline: richtext.tagline ?? null,
 				headline: richtext.headline ?? null,
 				content: richtext.content ?? null,
 				alignment: richtext.alignment ?? 'left',
@@ -494,7 +487,7 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 			const gallery = applyTranslation(
 				item as BlockGallery,
 				(item as BlockGallery).translations?.[0],
-				['headline', 'tagline', 'text']
+				['headline', 'text']
 			);
 
 			return {
@@ -502,7 +495,6 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 				id: block.id,
 				galleryId: gallery.id,
 				background,
-				tagline: gallery.tagline ?? null,
 				headline: gallery.headline ?? null,
 				text: gallery.text ?? null,
 				images: resolveGalleryImages(gallery)

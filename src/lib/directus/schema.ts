@@ -16,14 +16,12 @@ export interface BlockGalleryItem {
 export interface BlockGalleryTranslation {
 	languages_code: string;
 	headline?: string | null;
-	tagline?: string | null;
 	text?: string | null;
 }
 
 export interface BlockGallery {
 	id: string;
 	headline?: string | null;
-	tagline?: string | null;
 	text?: string | null;
 	items?: BlockGalleryItem[] | null;
 	translations?: BlockGalleryTranslation[] | null;
@@ -66,14 +64,12 @@ export interface BlockHero {
 export interface BlockRichtextTranslation {
 	languages_code: string;
 	headline?: string | null;
-	tagline?: string | null;
 	content?: string | null;
 }
 
 export interface BlockRichtext {
 	id: string;
 	headline?: string | null;
-	tagline?: string | null;
 	content?: string | null;
 	alignment?: 'left' | 'center' | 'right' | string | null;
 	Image?: DirectusFile | string | null;

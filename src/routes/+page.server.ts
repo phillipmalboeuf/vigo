@@ -17,7 +17,6 @@ export type HomeGallery = {
 	id: string;
 	sort: number;
 	headline: string | null;
-	tagline: string | null;
 	images: HomeGalleryImage[];
 };
 
@@ -51,7 +50,6 @@ function toHomeGallery(block: PageBlock): HomeGallery | null {
 		id: block.item.id,
 		sort: block.sort ?? 0,
 		headline: block.item.headline ?? null,
-		tagline: block.item.tagline ?? null,
 		images: toGalleryImages(block.item)
 	};
 }
@@ -78,7 +76,6 @@ export const load: PageServerLoad = async () => {
 								block_gallery: [
 									'id',
 									'headline',
-									'tagline',
 									{
 										items: [
 											'id',
@@ -111,7 +108,10 @@ export const load: PageServerLoad = async () => {
 				}
 			}
 		})
-	);
+	).catch((error) => {
+		console.error(error);
+		return { blocks: [] };
+	});
 
 	const galleries = (gallery?.blocks ?? [])
 		.map(toHomeGallery)

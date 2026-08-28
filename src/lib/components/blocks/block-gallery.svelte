@@ -29,12 +29,9 @@
     </ul>
   {/if}
 
-  {#if block.tagline || block.headline || block.text}
+  {#if block.headline || block.text}
     <header class="header col col--6of12 col--mobile--12of12">
       <div class="flex flex--gapped flex--column">
-        {#if block.tagline}
-          <p class="tagline">{block.tagline}</p>
-        {/if}
         {#if block.headline}
           <h2 class="h6"><span>◁◁</span><br><a href="/#{block.galleryId}" use:homeLink>{block.headline}</a></h2>
         {/if}
@@ -86,13 +83,6 @@
       text-transform: uppercase;
       margin-bottom: 0;
     }
-  }
-
-  .tagline {
-    font-size: $s-1;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: $s-2;
   }
 
   .richtext {

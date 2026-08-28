@@ -28,10 +28,6 @@
       class:col--12of12={!block.image}
     >
       <div class="flex flex--gapped flex--column">
-      {#if block.tagline}
-        <p class="tagline">{block.tagline}</p>
-      {/if}
-
       {#if block.headline}
         <h1>{block.headline}</h1>
       {/if}
@@ -106,13 +102,6 @@
 
   h1 {
     display: none;
-  }
-
-  .tagline {
-    font-size: $s-1;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: $s-2;
   }
 
   .richtext {
