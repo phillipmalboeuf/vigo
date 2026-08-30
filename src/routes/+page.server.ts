@@ -108,10 +108,7 @@ export const load: PageServerLoad = async () => {
 				}
 			}
 		})
-	).catch((error) => {
-		console.error(error);
-		return { blocks: [] };
-	});
+	);
 
 	const galleries = (gallery?.blocks ?? [])
 		.map(toHomeGallery)
