@@ -5,6 +5,7 @@ export interface DirectusFile {
 	type?: string | null;
 	width?: number | null;
 	height?: number | null;
+	tags?: string[] | null;
 }
 
 export interface BlockGalleryItem {

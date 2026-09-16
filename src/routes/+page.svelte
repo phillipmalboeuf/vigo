@@ -4,7 +4,7 @@
   import Image from '$lib/components/image.svelte'
   import Video from '$lib/components/video.svelte'
   import Loading from '$lib/components/loading.svelte'
-  import { isVideoFile } from '$lib/directus/media'
+  import { isVideoFile, mediaOrientation } from '$lib/directus/media'
 
   import type { PageProps } from './$types';
   import { browser } from '$app/environment';
@@ -16,12 +16,6 @@
     scrollToGalleryFromHash,
     unregisterHomeSlider
   } from '$lib/home-slider';
-
-  function mediaOrientation(width: number | null, height: number | null): 'horizontal' | 'vertical' | 'square' {
-    if (width === null || height === null) return 'horizontal'
-    if (width === height) return 'square'
-    return height > width ? 'vertical' : 'horizontal'
-  }
   
   let { data }: PageProps = $props();
 
@@ -133,7 +127,7 @@
     }}>
     {#each gallery.images as image}
       <div class="slide">
-        <div class="media-frame media-frame--{mediaOrientation(image.width, image.height)}">
+        <div class="media-frame media-frame--{mediaOrientation(image)}">
           {#if isVideoFile(image.type)}
             <Video src={image.src} title={image.title} width={image.width} height={image.height} />
           {:else}
@@ -144,7 +138,7 @@
     {/each}
     {#each gallery.images as image}
       <div class="slide">
-        <div class="media-frame media-frame--{mediaOrientation(image.width, image.height)}">
+        <div class="media-frame media-frame--{mediaOrientation(image)}">
           {#if isVideoFile(image.type)}
             <Video src={image.src} title={image.title} width={image.width} height={image.height} />
           {:else}
@@ -155,7 +149,7 @@
     {/each}
     {#each gallery.images as image}
       <div class="slide">
-        <div class="media-frame media-frame--{mediaOrientation(image.width, image.height)}">
+        <div class="media-frame media-frame--{mediaOrientation(image)}">
           {#if isVideoFile(image.type)}
             <Video src={image.src} title={image.title} width={image.width} height={image.height} />
           {:else}

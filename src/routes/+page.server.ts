@@ -10,6 +10,7 @@ export type HomeGalleryImage = {
 	type: string | null;
 	width: number | null;
 	height: number | null;
+	tags: string[];
 	src: string;
 };
 
@@ -37,6 +38,7 @@ function toGalleryImages(gallery: BlockGallery): HomeGalleryImage[] {
 					type: item.directus_file.type ?? null,
 					width: item.directus_file.width ?? null,
 					height: item.directus_file.height ?? null,
+					tags: item.directus_file.tags ?? [],
 					src: assetUrl(item.directus_file.id)
 				}
 			];
@@ -87,7 +89,8 @@ export const load: PageServerLoad = async () => {
 													'title',
 													'type',
 													'width',
-													'height'
+													'height',
+													'tags'
 												]
 											}
 										]
