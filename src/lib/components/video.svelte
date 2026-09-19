@@ -180,6 +180,7 @@
   class:ready={ready}
   onpointermove={isLong ? revealControls : undefined}
   onpointerdown={isLong ? revealControls : undefined}
+  oncontextmenu={(event) => event.preventDefault()}
 >
   <video
     bind:this={video}
@@ -188,6 +189,7 @@
     ontimeupdate={onTimeUpdate}
     onplay={() => playing = true}
     onpause={() => playing = false}
+    oncontextmenu={(event) => event.preventDefault()}
     {src}
     loop={true}
     muted={shouldMute}
@@ -279,6 +281,9 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
   }
 
   .controls {

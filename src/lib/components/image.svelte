@@ -51,6 +51,7 @@
 
 <img
   onload={() => ready = true}
+  oncontextmenu={(event) => event.preventDefault()}
   class:ready={ready}
   src={src}
   srcset={sourceSet || undefined}
@@ -65,6 +66,9 @@
 <style lang="scss">
   img {
     transition: opacity 666ms;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
     
     &:not(.ready) {
       opacity: 0;
