@@ -22,6 +22,7 @@
               alt={image.alt}
               width={image.width}
               height={image.height}
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </a>
         </li>

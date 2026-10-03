@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { dev } from '$app/environment'
+
   const LONG_VIDEO_SECONDS = 8
   const CONTROLS_IDLE_MS = 2500
 
@@ -42,6 +44,7 @@
     const el = video
     if (!el) return
 
+    const target = el.parentElement ?? el
     const observer = new IntersectionObserver(
       ([entry]) => {
         inView = entry.isIntersecting
@@ -57,7 +60,7 @@
       { threshold: 0.5 }
     )
 
-    observer.observe(el)
+    observer.observe(target)
     return () => {
       observer.disconnect()
       clearHideControlsTimer()
@@ -180,7 +183,7 @@
   class:ready={ready}
   onpointermove={isLong ? revealControls : undefined}
   onpointerdown={isLong ? revealControls : undefined}
-  oncontextmenu={(event) => event.preventDefault()}
+  oncontextmenu={dev ? undefined : (event) => event.preventDefault()}
 >
   <video
     bind:this={video}
@@ -189,7 +192,8 @@
     ontimeupdate={onTimeUpdate}
     onplay={() => playing = true}
     onpause={() => playing = false}
-    oncontextmenu={(event) => event.preventDefault()}
+    oncontextmenu={dev ? undefined : (event) => event.preventDefault()}
+    preload="none"
     {src}
     loop={true}
     muted={shouldMute}

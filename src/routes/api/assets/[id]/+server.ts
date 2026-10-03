@@ -48,6 +48,10 @@ async function proxyAsset({ params, request, url }: Parameters<RequestHandler>[0
 		if (value) responseHeaders.set(header, value);
 	}
 
+	if (upstream.ok) {
+		responseHeaders.set('Cache-Control', 'public, max-age=2592000');
+	}
+
 	return new Response(upstream.body, {
 		status: upstream.status,
 		statusText: upstream.statusText,

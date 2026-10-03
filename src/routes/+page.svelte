@@ -131,29 +131,13 @@
           {#if isVideoFile(image.type)}
             <Video src={image.src} title={image.title} width={image.width} height={image.height} />
           {:else}
-            <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
-          {/if}
-        </div>
-      </div>
-    {/each}
-    {#each gallery.images as image}
-      <div class="slide">
-        <div class="media-frame media-frame--{mediaOrientation(image)}">
-          {#if isVideoFile(image.type)}
-            <Video src={image.src} title={image.title} width={image.width} height={image.height} />
-          {:else}
-            <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
-          {/if}
-        </div>
-      </div>
-    {/each}
-    {#each gallery.images as image}
-      <div class="slide">
-        <div class="media-frame media-frame--{mediaOrientation(image)}">
-          {#if isVideoFile(image.type)}
-            <Video src={image.src} title={image.title} width={image.width} height={image.height} />
-          {:else}
-            <Image src={image.src} alt={image.title ?? ''} width={image.width} height={image.height} />
+            <Image
+              src={image.src}
+              alt={image.title ?? ''}
+              width={image.width}
+              height={image.height}
+              sizes="(orientation: portrait) 100vw, 70vh"
+            />
           {/if}
         </div>
       </div>

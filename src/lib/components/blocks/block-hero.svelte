@@ -35,6 +35,7 @@
           alt={block.image.alt}
           width={block.image.width}
           height={block.image.height}
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
       </figure>
     {/if}

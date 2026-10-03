@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { dev } from '$app/environment'
+
   type Props = {
     src: string
     alt: string
@@ -23,39 +25,35 @@
 
   let ready = $state(false)
 
-  const isVertical = $derived(width !== null && height !== null && height > width)
-
-  function withTransformParam(url: string, targetSize: number, dimension: 'width' | 'height'): string {
+  function withTransform(url: string, targetWidth: number): string {
     const separator = url.includes('?') ? '&' : '?'
-    return `${url}${separator}${dimension}=${targetSize}&format=webp`
+    return `${url}${separator}width=${targetWidth}&format=webp&quality=75&fit=inside&withoutEnlargement=true`
   }
 
-  const sourceSet = $derived.by(() => {
-    const maxSize = isVertical ? height : width
-    const candidates = widths
-      .filter((candidate) => candidate > 0 && (maxSize === null || candidate <= maxSize))
+  const candidates = $derived(
+    widths
+      .filter((candidate) => candidate > 0 && (width === null || candidate <= width))
       .sort((a, b) => a - b)
+  )
 
-    if (maxSize !== null && !candidates.includes(maxSize)) {
-      candidates.push(maxSize)
-    }
+  const sourceSet = $derived(
+    candidates.map((candidate) => `${withTransform(src, candidate)} ${candidate}w`).join(', ')
+  )
 
-    const dimension = isVertical ? 'height' : 'width'
-    const descriptor = isVertical ? 'h' : 'w'
-
-    return candidates
-      .map((candidate) => `${withTransformParam(src, candidate, dimension)} ${candidate}${descriptor}`)
-      .join(', ')
+  const fallbackSrc = $derived.by(() => {
+    if (candidates.length === 0) return src
+    const preferred = candidates.find((candidate) => candidate >= 1024) ?? candidates.at(-1)
+    return preferred ? withTransform(src, preferred) : src
   })
 </script>
 
 <img
   onload={() => ready = true}
-  oncontextmenu={(event) => event.preventDefault()}
+  oncontextmenu={dev ? undefined : (event) => event.preventDefault()}
   class:ready={ready}
-  src={src}
-  srcset={sourceSet || undefined}
   sizes={sourceSet ? sizes : undefined}
+  srcset={sourceSet || undefined}
+  src={fallbackSrc}
   {alt}
   {loading}
   {decoding}
@@ -69,7 +67,7 @@
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
-    
+
     &:not(.ready) {
       opacity: 0;
     }

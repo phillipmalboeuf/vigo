@@ -29,6 +29,7 @@
                 alt={post.image.alt}
                 width={post.image.width}
                 height={post.image.height}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
             {/if}
 
