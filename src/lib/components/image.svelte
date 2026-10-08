@@ -27,7 +27,7 @@
 
   function withTransform(url: string, targetWidth: number): string {
     const separator = url.includes('?') ? '&' : '?'
-    return `${url}${separator}width=${targetWidth}&format=webp&quality=75&fit=inside&withoutEnlargement=true`
+    return `${url}${separator}width=${targetWidth}&format=webp&quality=50&fit=inside&withoutEnlargement=true`
   }
 
   const candidates = $derived(
