@@ -263,7 +263,8 @@
 
     @media (max-width: $tablet_portrait) {
       :global(svg:first-child) {
-        width: 340px;
+        // width: 340px;
+        padding: 0 15px;
       }
     }
 
