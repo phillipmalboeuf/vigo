@@ -10,10 +10,10 @@
   let { block }: Props = $props()
 </script>
 
-<section class="block block-gallery col col--6of12 {block.background}">
+<section class="block block-gallery col col--6of12 col--tablet--4of12 col--mobile--6of12 {block.background}">
   <div class="flex layout">
   {#if block.images.length}
-    <ul class="col col--6of12 col--mobile--12of12 grid">
+    <ul class="col col--6of12 col--tablet--12of12 grid">
       {#each block.images as image (image.id)}
         <li class="col col--12of12">
           <a href="/#{block.galleryId}" use:homeLink>
@@ -31,7 +31,7 @@
   {/if}
 
   {#if block.headline || block.text}
-    <header class="header col col--6of12 col--mobile--12of12">
+    <header class="header col col--6of12 col--tablet--12of12">
       <div class="flex flex--gapped flex--column">
         {#if block.headline}
           <h2 class="h6"><span>◁◁</span><br><a href="/#{block.galleryId}" use:homeLink>{block.headline}</a></h2>
@@ -72,7 +72,7 @@
   }
 
   .header {
-    @media (max-width: $mobile) {
+    @media (max-width: $tablet_portrait) {
       display: none;
     }
 

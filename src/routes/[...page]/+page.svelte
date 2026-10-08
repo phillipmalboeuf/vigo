@@ -149,9 +149,19 @@
 
     color: $noir;
 
-    @media (max-width: $tablet_portrait) {
+    .page--about + & {
+      position: absolute;
+    }
+
+    @media (orientation: portrait) and (max-width: $tablet_portrait) {
       bottom: 50dvh;
       transform: translateY(50%);
+      padding: $s2;
+    }
+
+    @media (max-width: $mobile) {
+      bottom: 50svh;
+      transform: translateY(70%);
       padding: $s0;
     }
   }
