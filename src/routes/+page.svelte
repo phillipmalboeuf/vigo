@@ -343,7 +343,9 @@
         aspect-ratio: 1920 / 2400;
         height: auto;
         max-height: 100dvh;
-        width: auto;
+        // Explicit width: `auto` collapses to 0 because the image inside is
+        // width: 100% and has no intrinsic size contribution in a flex item.
+        width: min(100%, calc(100dvh * 1920 / 2400));
         max-width: 100%;
       }
 
