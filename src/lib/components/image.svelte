@@ -15,6 +15,7 @@
   }
 
   const PLACEHOLDER_WIDTH = 32
+  const LAZY_ROOT_MARGIN = '200px'
 
   let {
     src,
@@ -30,6 +31,34 @@
 
   let ready = $state(false)
   let canvas = $state<HTMLCanvasElement | null>(null)
+  let frame = $state<HTMLElement | null>(null)
+  let visible = $state(false)
+
+  // `eager` images load right away; `lazy` ones wait until the frame nears the viewport.
+  const active = $derived(loading === 'eager' || visible)
+
+  $effect(() => {
+    const node = frame
+    if (!node || active) return
+
+    if (typeof IntersectionObserver === 'undefined') {
+      visible = true
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          visible = true
+          observer.disconnect()
+        }
+      },
+      { rootMargin: LAZY_ROOT_MARGIN }
+    )
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  })
 
   function withTransform(url: string, targetWidth: number): string {
     const separator = url.includes('?') ? '&' : '?'
@@ -89,7 +118,7 @@
   })
 </script>
 
-<span class="image-frame" style:--image-ratio={aspectRatio}>
+<span class="image-frame" style:--image-ratio={aspectRatio} bind:this={frame}>
   {#if blurhash}
     <canvas bind:this={canvas} class="placeholder" aria-hidden="true"></canvas>
   {/if}
@@ -97,11 +126,10 @@
     onload={() => ready = true}
     oncontextmenu={dev ? undefined : (event) => event.preventDefault()}
     class:ready={ready}
-    sizes={sourceSet ? sizes : undefined}
-    srcset={sourceSet || undefined}
-    src={fallbackSrc}
+    sizes={active && sourceSet ? sizes : undefined}
+    srcset={active ? sourceSet || undefined : undefined}
+    src={active ? fallbackSrc : undefined}
     {alt}
-    {loading}
     {decoding}
     width={width ?? undefined}
     height={height ?? undefined}
