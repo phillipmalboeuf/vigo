@@ -30,6 +30,7 @@
                 width={post.image.width}
                 height={post.image.height}
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                blurhash={post.image.blurhash}
               />
             {/if}
 
@@ -83,10 +84,14 @@
     }
   }
 
+  .card :global(.image-frame),
+  .card :global(img) {
+    aspect-ratio: 4 / 3;
+  }
+
   .card :global(img) {
     width: 100%;
     height: auto;
-    aspect-ratio: 4 / 3;
     object-fit: cover;
   }
 

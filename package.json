@@ -34,7 +34,9 @@
 	},
 	"dependencies": {
 		"@directus/sdk": "^21.3.0",
+		"blurhash": "^2.0.5",
 		"embla-carousel-svelte": "^8.6.0",
-		"embla-carousel-wheel-gestures": "^8.1.0"
+		"embla-carousel-wheel-gestures": "^8.1.0",
+		"sharp": "^0.35.5"
 	}
 }

@@ -137,6 +137,7 @@
               width={image.width}
               height={image.height}
               sizes="(orientation: portrait) 100vw, 70vh"
+              blurhash={image.blurhash}
             />
           {/if}
         </div>
@@ -350,6 +351,12 @@
         aspect-ratio: 1 / 1;
         height: auto;
       }
+    }
+
+    :global(.image-frame) {
+      aspect-ratio: inherit;
+      width: 100%;
+      height: 100%;
     }
 
     :global(img),

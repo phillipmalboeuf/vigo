@@ -1,8 +1,16 @@
 import { directus } from '$lib/clients/directus';
 import { assetUrl } from '$lib/directus/assets';
-import type { BlockGallery, DirectusFile, PageBlock } from '$lib/directus/schema';
+import {
+	directusFileFields,
+	type BlockGallery,
+	type DirectusFile,
+	type PageBlock
+} from '$lib/directus/schema';
+import { ensureBlurhashFields, scheduleBlurhash } from '$lib/server/blurhash';
 import { readItems } from '@directus/sdk';
 import type { PageServerLoad } from './$types';
+
+const homeGalleryFileFields = [...directusFileFields, 'filename_download', 'tags'] as const;
 
 export type HomeGalleryImage = {
 	id: string;
@@ -12,6 +20,7 @@ export type HomeGalleryImage = {
 	height: number | null;
 	tags: string[];
 	src: string;
+	blurhash: string | null;
 };
 
 export type HomeGallery = {
@@ -31,6 +40,8 @@ function toGalleryImages(gallery: BlockGallery): HomeGalleryImage[] {
 		.flatMap((item) => {
 			if (!isDirectusFile(item.directus_file)) return [];
 
+			scheduleBlurhash(item.directus_file);
+
 			return [
 				{
 					id: item.directus_file.id,
@@ -39,7 +50,8 @@ function toGalleryImages(gallery: BlockGallery): HomeGalleryImage[] {
 					width: item.directus_file.width ?? null,
 					height: item.directus_file.height ?? null,
 					tags: item.directus_file.tags ?? [],
-					src: assetUrl(item.directus_file.id)
+					src: assetUrl(item.directus_file.id),
+					blurhash: item.directus_file.blurhash ?? null
 				}
 			];
 		});
@@ -57,6 +69,8 @@ function toHomeGallery(block: PageBlock): HomeGallery | null {
 }
 
 export const load: PageServerLoad = async () => {
+	await ensureBlurhashFields();
+
 	const [gallery] = await directus.request(
 		readItems('pages', {
 			filter: {
@@ -83,15 +97,7 @@ export const load: PageServerLoad = async () => {
 											'id',
 											'sort',
 											{
-												directus_file: [
-													'id',
-													'filename_download',
-													'title',
-													'type',
-													'width',
-													'height',
-													'tags'
-												]
+												directus_file: homeGalleryFileFields
 											}
 										]
 									}

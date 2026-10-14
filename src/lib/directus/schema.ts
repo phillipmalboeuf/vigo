@@ -1,11 +1,25 @@
+export const directusFileFields = [
+	'id',
+	'filename_disk',
+	'title',
+	'type',
+	'width',
+	'height',
+	'blurhash',
+	'blurhash_filename_disk'
+] as const;
+
 export interface DirectusFile {
 	id: string;
+	filename_disk?: string | null;
 	filename_download?: string | null;
 	title?: string | null;
 	type?: string | null;
 	width?: number | null;
 	height?: number | null;
 	tags?: string[] | null;
+	blurhash?: string | null;
+	blurhash_filename_disk?: string | null;
 }
 
 export interface BlockGalleryItem {

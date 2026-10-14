@@ -1,21 +1,23 @@
 import { directus } from '$lib/clients/directus';
 import { assetUrl } from '$lib/directus/assets';
-import type {
-	BlockButton,
-	BlockForm,
-	BlockGallery,
-	BlockHero,
-	BlockItem,
-	BlockPosts,
-	BlockPricing,
-	BlockRichtext,
-	DirectusFile,
-	Form,
-	FormField,
-	Page,
-	PageBlock,
-	Post
+import {
+	directusFileFields,
+	type BlockButton,
+	type BlockForm,
+	type BlockGallery,
+	type BlockHero,
+	type BlockItem,
+	type BlockPosts,
+	type BlockPricing,
+	type BlockRichtext,
+	type DirectusFile,
+	type Form,
+	type FormField,
+	type Page,
+	type PageBlock,
+	type Post
 } from '$lib/directus/schema';
+import { ensureBlurhashFields, scheduleBlurhash } from '$lib/server/blurhash';
 import { getLocale } from '$lib/paraglide/runtime';
 import { readItems } from '@directus/sdk';
 
@@ -25,6 +27,7 @@ export type ResolvedImage = {
 	alt: string;
 	width: number | null;
 	height: number | null;
+	blurhash: string | null;
 };
 
 export type ResolvedButton = {
@@ -172,7 +175,7 @@ function pageFields(includeTranslations: boolean) {
 					'headline',
 					'content',
 					'alignment',
-					{ Image: ['id', 'title', 'width', 'height'] },
+					{ Image: directusFileFields },
 					{ translations: ['languages_code', 'headline', 'content'] }
 				],
 				block_gallery: [
@@ -183,7 +186,7 @@ function pageFields(includeTranslations: boolean) {
 						items: [
 							'id',
 							'sort',
-							{ directus_file: ['id', 'title', 'width', 'height'] }
+							{ directus_file: directusFileFields }
 						]
 					},
 					{ translations: ['languages_code', 'headline', 'text'] }
@@ -195,7 +198,7 @@ function pageFields(includeTranslations: boolean) {
 					'headline',
 					'content',
 					'alignment',
-					{ Image: ['id', 'title', 'width', 'height'] }
+					{ Image: directusFileFields }
 				],
 				block_gallery: [
 					'id',
@@ -205,7 +208,7 @@ function pageFields(includeTranslations: boolean) {
 						items: [
 							'id',
 							'sort',
-							{ directus_file: ['id', 'title', 'width', 'height'] }
+							{ directus_file: directusFileFields }
 						]
 					}
 				]
@@ -232,7 +235,7 @@ function pageFields(includeTranslations: boolean) {
 						'description',
 						'layout',
 						{
-							image: ['id', 'title', 'width', 'height']
+							image: directusFileFields
 						},
 						{
 							button_group: [
@@ -335,12 +338,15 @@ function resolveImage(
 ): ResolvedImage | null {
 	if (!isDirectusFile(file)) return null;
 
+	scheduleBlurhash(file);
+
 	return {
 		id: file.id,
 		src: assetUrl(file.id),
 		alt: file.title ?? alt,
 		width: file.width ?? null,
-		height: file.height ?? null
+		height: file.height ?? null,
+		blurhash: file.blurhash ?? null
 	};
 }
 
@@ -432,7 +438,7 @@ async function fetchPosts(limit = 6): Promise<ResolvedPost[]> {
 				'slug',
 				'description',
 				'published_at',
-				{ image: ['id', 'title', 'width', 'height'] }
+				{ image: directusFileFields }
 			]
 		})
 	);
@@ -562,6 +568,8 @@ async function resolveBlock(block: PageBlock): Promise<ResolvedBlock | null> {
 }
 
 export async function loadPage(permalink: string): Promise<ResolvedPage | null> {
+	await ensureBlurhashFields();
+
 	const languageCode = directusLanguageCode(getLocale());
 
 	const [page] = (await directus.request(

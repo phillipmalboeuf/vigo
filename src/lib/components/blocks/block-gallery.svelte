@@ -23,6 +23,7 @@
               width={image.width}
               height={image.height}
               sizes="(max-width: 768px) 100vw, 50vw"
+              blurhash={image.blurhash}
             />
           </a>
         </li>
@@ -114,10 +115,14 @@
     }
   }
 
+  .grid :global(.image-frame),
+  .grid :global(img) {
+    aspect-ratio: 1 / 1;
+  }
+
   .grid :global(img) {
     width: 100%;
     height: auto;
-    aspect-ratio: 1 / 1;
     object-fit: cover;
   }
 

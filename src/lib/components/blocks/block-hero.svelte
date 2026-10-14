@@ -36,6 +36,7 @@
           width={block.image.width}
           height={block.image.height}
           sizes="(max-width: 768px) 100vw, 50vw"
+          blurhash={block.image.blurhash}
         />
       </figure>
     {/if}
@@ -76,9 +77,13 @@
     }
   }
 
+  .media :global(.image-frame),
+  .media :global(img) {
+    border-radius: $radius;
+  }
+
   .media :global(img) {
     width: 100%;
     height: auto;
-    border-radius: $radius;
   }
 </style>

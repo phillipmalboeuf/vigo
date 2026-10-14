@@ -19,6 +19,7 @@
           width={block.image.width}
           height={block.image.height}
           sizes="(max-width: 768px) 100vw, 50vw"
+          blurhash={block.image.blurhash}
         />
       </figure>
     {/if}
@@ -149,9 +150,14 @@
     }
   }
 
-  .media :global(img) {
+  .media :global(.image-frame) {
     width: 100%;
     height: calc(100dvh - (var(--page-gutter) * 2));
+  }
+
+  .media :global(img) {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 
@@ -178,7 +184,7 @@
         order: 1;
       }
 
-      .media :global(img) {
+      .media :global(.image-frame) {
         height: calc(50dvh - 14vw);
         border-top-right-radius: $s2;
         border-top-left-radius: $s2;
@@ -198,7 +204,7 @@
         top: 0;
       }
 
-      .media :global(img) {
+      .media :global(.image-frame) {
         height: calc(50dvh - 14vw);
         border-top-right-radius: $s2;
         border-top-left-radius: $s2;
