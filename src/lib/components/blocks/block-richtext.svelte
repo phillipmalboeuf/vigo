@@ -49,9 +49,9 @@
     padding: var(--page-gutter);
     padding-top: calc(var(--page-gutter) + env(safe-area-inset-top, 0px));
 
-    @media (max-width: $mobile) {
+    @media (max-width: $tablet_portrait) {
       --page-gutter: #{$s0};
-      padding-top: calc(#{$s2} + env(safe-area-inset-top, 0px));
+      padding-top: calc(#{$s2 * 2} + env(safe-area-inset-top, 0px));
     }
 
     .inner {
@@ -162,7 +162,7 @@
   }
 
   // Tablet portrait + mobile: stack like mobile (image on top, text below)
-  @media (orientation: portrait) and (max-width: $tablet_portrait) {
+  @media (max-width: $tablet_portrait) {
     .block-richtext {
       .media,
       .content {
@@ -186,13 +186,13 @@
 
       .media :global(.image-frame) {
         height: calc(50dvh - 14vw);
-        border-top-right-radius: $s2;
-        border-top-left-radius: $s2;
+        // border-top-right-radius: $s2;
+        // border-top-left-radius: $s2;
       }
     }
   }
 
-  @media (max-width: $mobile) {
+  @media (max-width: $tablet_portrait) {
     .block-richtext {
       .media,
       .content {
@@ -206,8 +206,8 @@
 
       .media :global(.image-frame) {
         height: calc(50dvh - 14vw);
-        border-top-right-radius: $s2;
-        border-top-left-radius: $s2;
+        // border-top-right-radius: $s2;
+        // border-top-left-radius: $s2;
       }
     }
   }

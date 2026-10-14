@@ -134,7 +134,7 @@
   }
 
   header:has(+ .page--gallery) .locale-switcher {
-    @media (max-width: $mobile) {
+    @media (max-width: $tablet_portrait) {
       display: none;
     }
   }
@@ -159,10 +159,11 @@
       padding: $s2;
     }
 
-    @media (max-width: $mobile) {
-      bottom: 50svh;
-      transform: translateY(70%);
-      padding: $s0;
+    @media (max-width: $tablet_portrait) {
+      top: calc(#{$s2 * 2} + 1rem + env(safe-area-inset-top, 0px) + 50dvh - 14vw);
+      bottom: auto;
+      transform: none;
+      padding: 0 $s0;
     }
   }
 </style>
