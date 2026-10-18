@@ -62,7 +62,7 @@
 
   function withTransform(url: string, targetWidth: number): string {
     const separator = url.includes('?') ? '&' : '?'
-    return `${url}${separator}width=${targetWidth}&format=webp&fit=inside&withoutEnlargement=true`
+    return `${url}${separator}width=${targetWidth}&format=webp&quality=100&fit=inside&withoutEnlargement=true`
   }
 
   function placeholderSize(imageWidth: number | null, imageHeight: number | null) {
